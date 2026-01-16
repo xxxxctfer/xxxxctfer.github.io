@@ -6,13 +6,14 @@
 
 <link rel='canonical' href='https://xxxxctfer.github.io/p/test-chinese/'>
 
-<link rel="stylesheet" href="/scss/style.min.c9b9de980d2656a2f296a23f1910881b2bd7d2db375e28b2dd21c41d1ef96e32.css"><meta property='og:title' content="JeecgBoot漏洞复现">
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="JeecgBoot漏洞复现">
 <meta property='og:description' content="想学代码审计了，拿JeecgBoot练练手">
 <meta property='og:url' content='https://xxxxctfer.github.io/p/test-chinese/'>
-<meta property='og:site_name' content='xxxx-ctfer'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-12-30T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-12-30T00:00:00&#43;00:00'/>
+<meta property='og:site_name' content='xxxx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-12-30T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-12-30T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/JeecgBoot/1.png' />
 <meta name="twitter:title" content="JeecgBoot漏洞复现">
-<meta name="twitter:description" content="想学代码审计了，拿JeecgBoot练练手">
+<meta name="twitter:description" content="想学代码审计了，拿JeecgBoot练练手"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/JeecgBoot/1.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -71,14 +72,14 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">xxxx-ctfer</a></h1>
+            <h1 class="site-name"><a href="/">xxxx</a></h1>
             <h2 class="site-description">一个还在努力的xxxx</h2>
         </div>
     </header><ol class="menu-social">
             
                 <li>
                     <a 
-                        href='https://github.com/CaiJimmy/hugo-theme-stack'
+                        href='https://github.com/xxxxctfer'
                         target="_blank"
                         title="GitHub"
                         rel="me"
@@ -246,29 +247,29 @@
         
         <div class="widget--toc stack-toc">
             <ol class="toc-level-1"><li class="toc-item-h1">
-                        <a href="#%e5%bc%b1%e5%8f%a3%e4%bb%a4%e6%bc%8f%e6%b4%9e%e5%bc%b1%e5%8f%a3%e4%bb%a4%e6%bc%8f%e6%b4%9e%0d%0a%3c%2fh1%3e" aria-label="弱口令漏洞">弱口令漏洞</a><ol class="toc-level-2"><li class="toc-item-h2">
-                        <a href="#logincontrollerLoginController%0d%0a%3c%2fh2%3e" aria-label="LoginController">LoginController</a><li class="toc-item-h2">
-                        <a href="#%e4%bf%ae%e6%94%b9%e5%bb%ba%e8%ae%ae%e4%bf%ae%e6%94%b9%e5%bb%ba%e8%ae%ae%0d%0a%3c%2fh2%3e" aria-label="修改建议">修改建议</a></ol></li><li class="toc-item-h1">
-                        <a href="#%e4%bb%bb%e6%84%8f%e7%94%a8%e6%88%b7%e5%af%86%e7%a0%81%e9%87%8d%e7%bd%ae%e4%bb%bb%e6%84%8f%e7%94%a8%e6%88%b7%e5%af%86%e7%a0%81%e9%87%8d%e7%bd%ae%0d%0a%3c%2fh1%3e" aria-label="任意用户密码重置">任意用户密码重置</a><ol class="toc-level-2"><li class="toc-item-h2">
-                        <a href="#passwordchange%e6%8e%a5%e5%8f%a3passwordChange%e6%8e%a5%e5%8f%a3%0d%0a%3c%2fh2%3e" aria-label="passwordChange接口">passwordChange接口</a><li class="toc-item-h2">
-                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0d%0a%3c%2fh2%3e" aria-label="修复建议">修复建议</a></ol></li><li class="toc-item-h1">
-                        <a href="#%e4%bf%a1%e6%81%af%e6%b3%84%e9%9c%b2%e6%bc%8f%e6%b4%9e%e4%bf%a1%e6%81%af%e6%b3%84%e9%9c%b2%e6%bc%8f%e6%b4%9e%0d%0a%3c%2fh1%3e" aria-label="信息泄露漏洞">信息泄露漏洞</a><ol class="toc-level-2"><li class="toc-item-h2">
-                        <a href="#querysysuser%e6%8e%a5%e5%8f%a3querySysUser%e6%8e%a5%e5%8f%a3%0d%0a%3c%2fh2%3e" aria-label="querySysUser接口">querySysUser接口</a><li class="toc-item-h2">
-                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-1%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0d%0a%3c%2fh2%3e" aria-label="修复建议">修复建议</a></ol></li><li class="toc-item-h1">
-                        <a href="#%e7%9b%ae%e5%bd%95%e9%81%8d%e5%8e%86%e6%bc%8f%e6%b4%9e%e7%9b%ae%e5%bd%95%e9%81%8d%e5%8e%86%e6%bc%8f%e6%b4%9e%0d%0a%3c%2fh1%3e" aria-label="目录遍历漏洞">目录遍历漏洞</a><ol class="toc-level-2"><li class="toc-item-h2">
-                        <a href="#js%e6%96%87%e4%bb%b6%e4%bb%a3%e7%a0%81JS%e6%96%87%e4%bb%b6%e4%bb%a3%e7%a0%81%0d%0a%3c%2fh2%3e" aria-label="JS文件代码">JS文件代码</a><li class="toc-item-h2">
-                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-2%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0d%0a%3c%2fh2%3e" aria-label="修复建议">修复建议</a></ol></li><li class="toc-item-h1">
-                        <a href="#sql%e6%b3%a8%e5%85%a5SQL%e6%b3%a8%e5%85%a5%0d%0a%3c%2fh1%3e" aria-label="SQL注入">SQL注入</a><ol class="toc-level-2"><li class="toc-item-h2">
-                        <a href="#querytabledata%e6%8e%a5%e5%8f%a3queryTableData%e6%8e%a5%e5%8f%a3%0d%0a%3c%2fh2%3e" aria-label="queryTableData接口">queryTableData接口</a><li class="toc-item-h2">
-                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-3%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0d%0a%3c%2fh2%3e" aria-label="修复建议">修复建议</a><li class="toc-item-h2">
-                        <a href="#getdictitemsbytable%e6%8e%a5%e5%8f%a3getDictItemsByTable%e6%8e%a5%e5%8f%a3%0d%0a%3c%2fh2%3e" aria-label="getDictItemsByTable接口">getDictItemsByTable接口</a><li class="toc-item-h2">
-                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-4%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0d%0a%3c%2fh2%3e" aria-label="修复建议">修复建议</a></ol></li><li class="toc-item-h1">
-                        <a href="#ssti%e6%bc%8f%e6%b4%9eSSTI%e6%bc%8f%e6%b4%9e%0d%0a%3c%2fh1%3e" aria-label="SSTI漏洞">SSTI漏洞</a><ol class="toc-level-2"><li class="toc-item-h2">
-                        <a href="#loadtabledata%e6%96%b9%e6%b3%95loadTableData%e6%96%b9%e6%b3%95%0d%0a%3c%2fh2%3e" aria-label="loadTableData方法">loadTableData方法</a><li class="toc-item-h2">
-                        <a href="#sendmsg%e6%8e%a5%e5%8f%a3sendMsg%e6%8e%a5%e5%8f%a3%0d%0a%3c%2fh2%3e" aria-label="sendMsg接口">sendMsg接口</a></ol></li><li class="toc-item-h1">
-                        <a href="#%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0%e6%bc%8f%e6%b4%9e%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0%e6%bc%8f%e6%b4%9e%0d%0a%3c%2fh1%3e" aria-label="文件上传漏洞">文件上传漏洞</a><ol class="toc-level-2"><li class="toc-item-h2">
-                        <a href="#upload%e6%8e%a5%e5%8f%a3upload%e6%8e%a5%e5%8f%a3%0d%0a%3c%2fh2%3e" aria-label="upload接口">upload接口</a><li class="toc-item-h2">
-                        <a href="#commoncontrollerdocommonController.do%0d%0a%3c%2fh2%3e" aria-label="commonController.do">commonController.do</a></ol></li></ol></li></div>
+                        <a href="#%e5%bc%b1%e5%8f%a3%e4%bb%a4%e6%bc%8f%e6%b4%9e%e5%bc%b1%e5%8f%a3%e4%bb%a4%e6%bc%8f%e6%b4%9e%0a%3c%2fh1%3e" aria-label="弱口令漏洞 ">弱口令漏洞 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#logincontrollerLoginController%0a%3c%2fh2%3e" aria-label="LoginController ">LoginController </a><li class="toc-item-h2">
+                        <a href="#%e4%bf%ae%e6%94%b9%e5%bb%ba%e8%ae%ae%e4%bf%ae%e6%94%b9%e5%bb%ba%e8%ae%ae%0a%3c%2fh2%3e" aria-label="修改建议 ">修改建议 </a></ol></li><li class="toc-item-h1">
+                        <a href="#%e4%bb%bb%e6%84%8f%e7%94%a8%e6%88%b7%e5%af%86%e7%a0%81%e9%87%8d%e7%bd%ae%e4%bb%bb%e6%84%8f%e7%94%a8%e6%88%b7%e5%af%86%e7%a0%81%e9%87%8d%e7%bd%ae%0a%3c%2fh1%3e" aria-label="任意用户密码重置 ">任意用户密码重置 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#passwordchange%e6%8e%a5%e5%8f%a3passwordChange%e6%8e%a5%e5%8f%a3%0a%3c%2fh2%3e" aria-label="passwordChange接口 ">passwordChange接口 </a><li class="toc-item-h2">
+                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0a%3c%2fh2%3e" aria-label="修复建议 ">修复建议 </a></ol></li><li class="toc-item-h1">
+                        <a href="#%e4%bf%a1%e6%81%af%e6%b3%84%e9%9c%b2%e6%bc%8f%e6%b4%9e%e4%bf%a1%e6%81%af%e6%b3%84%e9%9c%b2%e6%bc%8f%e6%b4%9e%0a%3c%2fh1%3e" aria-label="信息泄露漏洞 ">信息泄露漏洞 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#querysysuser%e6%8e%a5%e5%8f%a3querySysUser%e6%8e%a5%e5%8f%a3%0a%3c%2fh2%3e" aria-label="querySysUser接口 ">querySysUser接口 </a><li class="toc-item-h2">
+                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-1%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0a%3c%2fh2%3e" aria-label="修复建议 ">修复建议 </a></ol></li><li class="toc-item-h1">
+                        <a href="#%e7%9b%ae%e5%bd%95%e9%81%8d%e5%8e%86%e6%bc%8f%e6%b4%9e%e7%9b%ae%e5%bd%95%e9%81%8d%e5%8e%86%e6%bc%8f%e6%b4%9e%0a%3c%2fh1%3e" aria-label="目录遍历漏洞 ">目录遍历漏洞 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#js%e6%96%87%e4%bb%b6%e4%bb%a3%e7%a0%81JS%e6%96%87%e4%bb%b6%e4%bb%a3%e7%a0%81%0a%3c%2fh2%3e" aria-label="JS文件代码 ">JS文件代码 </a><li class="toc-item-h2">
+                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-2%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0a%3c%2fh2%3e" aria-label="修复建议 ">修复建议 </a></ol></li><li class="toc-item-h1">
+                        <a href="#sql%e6%b3%a8%e5%85%a5SQL%e6%b3%a8%e5%85%a5%0a%3c%2fh1%3e" aria-label="SQL注入 ">SQL注入 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#querytabledata%e6%8e%a5%e5%8f%a3queryTableData%e6%8e%a5%e5%8f%a3%0a%3c%2fh2%3e" aria-label="queryTableData接口 ">queryTableData接口 </a><li class="toc-item-h2">
+                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-3%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0a%3c%2fh2%3e" aria-label="修复建议 ">修复建议 </a><li class="toc-item-h2">
+                        <a href="#getdictitemsbytable%e6%8e%a5%e5%8f%a3getDictItemsByTable%e6%8e%a5%e5%8f%a3%0a%3c%2fh2%3e" aria-label="getDictItemsByTable接口 ">getDictItemsByTable接口 </a><li class="toc-item-h2">
+                        <a href="#%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae-4%e4%bf%ae%e5%a4%8d%e5%bb%ba%e8%ae%ae%0a%3c%2fh2%3e" aria-label="修复建议 ">修复建议 </a></ol></li><li class="toc-item-h1">
+                        <a href="#ssti%e6%bc%8f%e6%b4%9eSSTI%e6%bc%8f%e6%b4%9e%0a%3c%2fh1%3e" aria-label="SSTI漏洞 ">SSTI漏洞 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#loadtabledata%e6%96%b9%e6%b3%95loadTableData%e6%96%b9%e6%b3%95%0a%3c%2fh2%3e" aria-label="loadTableData方法 ">loadTableData方法 </a><li class="toc-item-h2">
+                        <a href="#sendmsg%e6%8e%a5%e5%8f%a3sendMsg%e6%8e%a5%e5%8f%a3%0a%3c%2fh2%3e" aria-label="sendMsg接口 ">sendMsg接口 </a></ol></li><li class="toc-item-h1">
+                        <a href="#%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0%e6%bc%8f%e6%b4%9e%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0%e6%bc%8f%e6%b4%9e%0a%3c%2fh1%3e" aria-label="文件上传漏洞 ">文件上传漏洞 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#upload%e6%8e%a5%e5%8f%a3upload%e6%8e%a5%e5%8f%a3%0a%3c%2fh2%3e" aria-label="upload接口 ">upload接口 </a><li class="toc-item-h2">
+                        <a href="#commoncontrollerdocommonController.do%0a%3c%2fh2%3e" aria-label="commonController.do ">commonController.do </a></ol></li></ol></li></div>
     </section>
 
 
@@ -278,8 +279,16 @@
 
 
             <main class="main full-width">
-    <article class="main-article">
+    <article class="has-image main-article">
     <header class="article-header">
+        <div class="article-image">
+            <a href="/p/test-chinese/">
+                
+                    <img src="/images/JeecgBoot/1.png" loading="lazy" alt="Featured image of post JeecgBoot漏洞复现" />
+                
+            </a>
+        </div>
+    
 
     <div class="article-details">
     

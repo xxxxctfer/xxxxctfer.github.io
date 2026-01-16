@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>代码审计 on xxxx-ctfer</title>
+        <title>代码审计 on xxxx</title>
         <link>https://xxxxctfer.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</link>
-        <description>Recent content in 代码审计 on xxxx-ctfer</description>
+        <description>Recent content in 代码审计 on xxxx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>xxxx</copyright>
@@ -13,7 +13,7 @@
         <pubDate>Tue, 30 Dec 2025 00:00:00 +0000</pubDate>
         
         <guid>https://xxxxctfer.github.io/p/test-chinese/</guid>
-        <description>&lt;p&gt;我们还是先搜索一下这是个什么东西，这次代码审计的目的也就是为了学习一下怎么审计，去打一些老漏洞，挖掘一下看看。
+        <description>&lt;img src="https://xxxxctfer.github.io/images/JeecgBoot/1.png" alt="Featured image of post JeecgBoot漏洞复现" /&gt;&lt;p&gt;我们还是先搜索一下这是个什么东西，这次代码审计的目的也就是为了学习一下怎么审计，去打一些老漏洞，挖掘一下看看。
 先看搜索到的结果。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;[!NOTE] 简介

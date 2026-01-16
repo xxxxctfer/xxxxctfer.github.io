@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Web人 on xxxx</title>
+        <link>https://xxxxctfer.github.io/categories/web%E4%BA%BA/</link>
+        <description>Recent content in Web人 on xxxx</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>xxxx</copyright><atom:link href="https://xxxxctfer.github.io/categories/web%E4%BA%BA/index.xml" rel="self" type="application/rss+xml" />
+    </channel>
+</rss>

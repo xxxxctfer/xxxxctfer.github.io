@@ -1,19 +1,57 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>xxxx-ctfer</title>
+        <title>xxxx</title>
         <link>https://xxxxctfer.github.io/</link>
-        <description>Recent content on xxxx-ctfer</description>
+        <description>Recent content on xxxx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>xxxx</copyright>
-        <lastBuildDate>Tue, 30 Dec 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 16 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>关于</title>
+        <link>https://xxxxctfer.github.io/%E5%85%B3%E4%BA%8E/</link>
+        <pubDate>Fri, 16 Jan 2026 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxxxctfer.github.io/%E5%85%B3%E4%BA%8E/</guid>
+        <description>&lt;h2 id=&#34;个人简介&#34;&gt;个人简介
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;我的博客定位：分享CTF学习笔记、编程心得&lt;/li&gt;
+&lt;li&gt;联系方式：19173258605@163.com&lt;/li&gt;
+&lt;li&gt;个人简介：一个还在努力的ctfer&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;方向介绍&#34;&gt;方向介绍
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;一个web+pwn手，尽可能的多学习知识&lt;/li&gt;
+&lt;li&gt;在学习主流web知识点的同时学pwn&lt;/li&gt;
+&lt;li&gt;未来的就业还没想法，慢慢看呗&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>归档</title>
+        <link>https://xxxxctfer.github.io/archives/</link>
+        <pubDate>Fri, 16 Jan 2026 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxxxctfer.github.io/archives/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>友链</title>
+        <link>https://xxxxctfer.github.io/%E5%8F%8B%E9%93%BE/</link>
+        <pubDate>Fri, 16 Jan 2026 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxxxctfer.github.io/%E5%8F%8B%E9%93%BE/</guid>
+        <description>&lt;h1 id=&#34;我的友链&#34;&gt;我的友链
+&lt;/h1&gt;&lt;p&gt;欢迎交换友链～&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>JeecgBoot漏洞复现</title>
         <link>https://xxxxctfer.github.io/p/test-chinese/</link>
         <pubDate>Tue, 30 Dec 2025 00:00:00 +0000</pubDate>
         
         <guid>https://xxxxctfer.github.io/p/test-chinese/</guid>
-        <description>&lt;p&gt;我们还是先搜索一下这是个什么东西，这次代码审计的目的也就是为了学习一下怎么审计，去打一些老漏洞，挖掘一下看看。
+        <description>&lt;img src="https://xxxxctfer.github.io/images/JeecgBoot/1.png" alt="Featured image of post JeecgBoot漏洞复现" /&gt;&lt;p&gt;我们还是先搜索一下这是个什么东西，这次代码审计的目的也就是为了学习一下怎么审计，去打一些老漏洞，挖掘一下看看。
 先看搜索到的结果。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;[!NOTE] 简介

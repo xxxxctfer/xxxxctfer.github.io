@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>pwn菜鸟之路 on xxxx</title>
+        <link>https://xxxxctfer.github.io/categories/pwn%E8%8F%9C%E9%B8%9F%E4%B9%8B%E8%B7%AF/</link>
+        <description>Recent content in pwn菜鸟之路 on xxxx</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>en-us</language>
+        <copyright>xxxx</copyright><atom:link href="https://xxxxctfer.github.io/categories/pwn%E8%8F%9C%E9%B8%9F%E4%B9%8B%E8%B7%AF/index.xml" rel="self" type="application/rss+xml" />
+    </channel>
+</rss>

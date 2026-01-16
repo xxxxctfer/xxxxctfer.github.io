@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Categories on xxxx-ctfer</title>
+        <title>Categories on xxxx</title>
         <link>https://xxxxctfer.github.io/categories/</link>
-        <description>Recent content in Categories on xxxx-ctfer</description>
+        <description>Recent content in Categories on xxxx</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>xxxx</copyright>
@@ -13,15 +13,23 @@
         <pubDate>Tue, 30 Dec 2025 00:00:00 +0000</pubDate>
         
         <guid>https://xxxxctfer.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</guid>
-        <description></description>
+        <description>&lt;img src="https://xxxxctfer.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/code.png" alt="Featured image of post 代码审计" /&gt;</description>
         </item>
         <item>
-        <title>Test</title>
-        <link>https://xxxxctfer.github.io/categories/test/</link>
+        <title>pwn菜鸟之路</title>
+        <link>https://xxxxctfer.github.io/categories/pwn%E8%8F%9C%E9%B8%9F%E4%B9%8B%E8%B7%AF/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
         
-        <guid>https://xxxxctfer.github.io/categories/test/</guid>
-        <description>&lt;img src="https://xxxxctfer.github.io/categories/test/hutomo-abrianto-l2jk-uxb1BY-unsplash.jpg" alt="Featured image of post Test" /&gt;</description>
+        <guid>https://xxxxctfer.github.io/categories/pwn%E8%8F%9C%E9%B8%9F%E4%B9%8B%E8%B7%AF/</guid>
+        <description>&lt;img src="https://xxxxctfer.github.io/categories/pwn%E8%8F%9C%E9%B8%9F%E4%B9%8B%E8%B7%AF/PWN.png" alt="Featured image of post pwn菜鸟之路" /&gt;</description>
+        </item>
+        <item>
+        <title>Web人</title>
+        <link>https://xxxxctfer.github.io/categories/web%E4%BA%BA/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxxxctfer.github.io/categories/web%E4%BA%BA/</guid>
+        <description>&lt;img src="https://xxxxctfer.github.io/categories/web%E4%BA%BA/Web.png" alt="Featured image of post Web人" /&gt;</description>
         </item>
         
     </channel>
