@@ -3,9 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://xxxxctfer.github.io/</loc>
-    <lastmod>2026-01-23T00:00:00+00:00</lastmod>
+    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/categories/</loc>
+    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/categories/java%E5%AE%89%E5%85%A8/</loc>
+    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/post/</loc>
+    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/p/%E5%86%85%E5%AD%98%E9%A9%AC%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%AD%A5%E8%BF%90%E7%94%A8/</loc>
+    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/categories/cve%E6%BC%8F%E6%B4%9E/</loc>
     <lastmod>2026-01-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/p/%E7%AC%AC%E4%BA%8C%E4%B8%AAcve%E6%BC%8F%E6%B4%9E/</loc>
@@ -26,9 +38,6 @@
     <loc>https://xxxxctfer.github.io/%E5%8F%8B%E9%93%BE/</loc>
     <lastmod>2026-01-16T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://xxxxctfer.github.io/categories/</loc>
-    <lastmod>2025-12-30T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://xxxxctfer.github.io/p/jeecgboot%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</loc>
     <lastmod>2025-12-30T00:00:00+00:00</lastmod>
   </url><url>
@@ -40,8 +49,6 @@
   </url><url>
     <loc>https://xxxxctfer.github.io/archives/</loc>
     <lastmod>2019-05-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://xxxxctfer.github.io/categories/cve/</loc>
   </url><url>
     <loc>https://xxxxctfer.github.io/categories/pwn%E8%8F%9C%E9%B8%9F%E4%B9%8B%E8%B7%AF/</loc>
   </url><url>
