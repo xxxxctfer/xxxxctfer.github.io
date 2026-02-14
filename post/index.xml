@@ -199,8 +199,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;然后我们就可以去上传JSP马了，当然这里我们是来研究工具怎么做的，我们这里直接上工具。&lt;/p&gt;
-&lt;p&gt;:::warning
-msmap：&lt;a class=&#34;link&#34; href=&#34;https://github.com/hosch3n/msmap&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;msmap：&lt;a class=&#34;link&#34; href=&#34;https://github.com/hosch3n/msmap&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://github.com/hosch3n/msmap&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;python generator.py Java Tomcat Listener AES128 AntSword xxxx&lt;/p&gt;
 &lt;p&gt;python generator.py Java Tomcat Servlet RC4 Godzilla xxxx&lt;/p&gt;
@@ -213,15 +212,13 @@ msmap：&lt;a class=&#34;link&#34; href=&#34;https://github.com/hosch3n/msmap&#3
 &lt;h1 id=&#34;rce打内存马&#34;&gt;RCE打内存马
 &lt;/h1&gt;&lt;p&gt;这个东西的打法还挺常见的，命令执行打内存马呗，这个要好好学习一下。&lt;/p&gt;
 &lt;p&gt;出网的情况其实很简单，按照刚刚的路线，直接去打一个JSP马进来就好了。比如wegt去进行一个下载之类的，强调一下不出网的情况吧。&lt;/p&gt;
-&lt;p&gt;:::warning
-不出网RCE打内存马：&lt;/p&gt;
+&lt;p&gt;不出网RCE打内存马：&lt;/p&gt;
 &lt;p&gt;通过echo等输入命令，将JSP马的base64编码输入到临时文件中。&lt;/p&gt;
 &lt;p&gt;再用base64解码出来，变成JSP马，后续变内存马跟前面是一致的。&lt;/p&gt;
 &lt;p&gt;:::&lt;/p&gt;
 &lt;h1 id=&#34;反序列化打内存马&#34;&gt;反序列化打内存马
 &lt;/h1&gt;&lt;p&gt;这个算是最常见的了，这里的工具比较多，主要讲几种方法吧。&lt;/p&gt;
-&lt;p&gt;:::warning
-主要是看最后执行到的是什么方法吧&lt;/p&gt;
+&lt;p&gt;主要是看最后执行到的是什么方法吧&lt;/p&gt;
 &lt;p&gt;命令执行：这个就可以去打RCE访问JSP马的思路，不出网的话也是差不多&lt;/p&gt;
 &lt;p&gt;代码执行：有代码执行的时候相当于说你可以去控制执行的方法了，直接去注册路由就行&lt;/p&gt;
 &lt;p&gt;方法调用：同理，有方法调用就直接打就可以了&lt;/p&gt;
@@ -239,8 +236,7 @@ msmap：&lt;a class=&#34;link&#34; href=&#34;https://github.com/hosch3n/msmap&#3
 &lt;h1 id=&#34;ssti打内存马&#34;&gt;SSTI打内存马
 &lt;/h1&gt;&lt;p&gt;这个类型就比较多了，比如说BCEL注入什么的，这个我只能说打一个例子吧。&lt;/p&gt;
 &lt;p&gt;直接用工具打的，工具如下：&lt;/p&gt;
-&lt;p&gt;:::warning
-JavaGadgetGenerator：&lt;a class=&#34;link&#34; href=&#34;https://github.com/Lotus6/JavaGadgetGenerator&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+&lt;p&gt;JavaGadgetGenerator：&lt;a class=&#34;link&#34; href=&#34;https://github.com/Lotus6/JavaGadgetGenerator&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;https://github.com/Lotus6/JavaGadgetGenerator&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;这里有点不熟练，还要再试几下。&lt;/p&gt;
 &lt;p&gt;:::&lt;/p&gt;
