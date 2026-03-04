@@ -2,18 +2,18 @@
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="回顾一下TOP10，整理一下">
-<title>XXE整理</title>
+<title>文件包含整理</title>
 
-<link rel='canonical' href='https://xxxxctfer.github.io/p/xxe%E6%95%B4%E7%90%86/'>
+<link rel='canonical' href='https://xxxxctfer.github.io/p/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%95%B4%E7%90%86/'>
 
-<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="XXE整理">
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="文件包含整理">
 <meta property='og:description' content="回顾一下TOP10，整理一下">
-<meta property='og:url' content='https://xxxxctfer.github.io/p/xxe%E6%95%B4%E7%90%86/'>
+<meta property='og:url' content='https://xxxxctfer.github.io/p/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%95%B4%E7%90%86/'>
 <meta property='og:site_name' content='xxxx'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-02T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/TOP10/XXE/xxe1.png' />
-<meta name="twitter:title" content="XXE整理">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-04T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-04T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/TOP10/include/include1.png' />
+<meta name="twitter:title" content="文件包含整理">
 <meta name="twitter:description" content="回顾一下TOP10，整理一下"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/TOP10/XXE/xxe1.png' />
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/TOP10/include/include1.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -232,9 +232,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/xxe%E6%95%B4%E7%90%86/">
+            <a href="/p/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%95%B4%E7%90%86/">
                 
-                    <img src="/images/TOP10/XXE/xxe1.png" loading="lazy" alt="Featured image of post XXE整理" />
+                    <img src="/images/TOP10/include/include1.png" loading="lazy" alt="Featured image of post 文件包含整理" />
                 
             </a>
         </div>
@@ -253,7 +253,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/xxe%E6%95%B4%E7%90%86/">XXE整理</a>
+            <a href="/p/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%95%B4%E7%90%86/">文件包含整理</a>
         </h2>
     
         
@@ -279,7 +279,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-03-02T00:00:00Z'>2026-03-02</time>
+                <time class="article-time--published" datetime='2026-03-04T00:00:00Z'>2026-03-04</time>
             </div>
         
 
@@ -295,9 +295,49 @@
     <section class="article-content">
     
     
-    <p>总结一下这个半吊子的XXE漏洞，而且也好久没学了，看一下。</p>
+    <p>总结一下文件包含相关的一些问题，危害什么的。</p>
 <h1 id="利用">利用
-</h1><p>先写一个代码来看看怎么回事吧。</p>
+</h1><p>先写一个代码看看。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 存在文件包含漏洞的代码
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 场景：模拟网站通过参数加载不同页面
+</span></span></span><span class="line"><span class="cl"><span class="nv">$page</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">];</span> <span class="c1">// 直接接收用户输入，无任何过滤
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 直接将用户输入作为包含路径，触发漏洞
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$page</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="nv">$page</span><span class="p">;</span> <span class="c1">// 核心问题：未过滤、未校验的用户输入传入include
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>直接包含一下我们的flag文件。
+<img src="/images/TOP10/include/include1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+很明显就直接包含进去了，这里是包含的txt文件，所以直接显示到了页面上，如果包含的是一个脚本文件，就会直接执行，或者被连接利用。</p>
+<h1 id="修复">修复
+</h1><p>修复方案：比如白名单过滤，只能去包含白名单中有的文件，可以有效防止任意文件包含。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -313,69 +353,127 @@
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 获取用户输入的 XML（例如来自 POST 请求）
-</span></span></span><span class="line"><span class="cl"><span class="nv">$xml</span> <span class="o">=</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="s1">&#39;php://input&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 安全版本：白名单过滤 + 输入校验
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 1. 接收用户输入（仍保留，但后续会校验）
+</span></span></span><span class="line"><span class="cl"><span class="nv">$page</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 创建 DOMDocument 对象
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DOMDocument</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 启用外部实体处理（漏洞点）
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">substituteEntities</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>      <span class="c1">// 允许替换实体
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">loadXML</span><span class="p">(</span><span class="nv">$xml</span><span class="p">,</span> <span class="nx">LIBXML_NOENT</span><span class="p">);</span>    <span class="c1">// LIBXML_NOENT 会将实体替换为内容
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 输出解析后的内容
-</span></span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">saveXML</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 2. 定义合法文件白名单（核心修改点1）
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 只允许包含这些文件，新增/删除文件只需修改此列表
+</span></span></span><span class="line"><span class="cl"><span class="nv">$allowed_pages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;home.php&#39;</span><span class="p">,</span> <span class="s1">&#39;about.php&#39;</span><span class="p">,</span> <span class="s1">&#39;contact.php&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 3. 校验输入（核心修改点2）
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 只有输入在白名单内，才执行包含；否则加载默认首页
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$page</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">in_array</span><span class="p">(</span><span class="nv">$page</span><span class="p">,</span> <span class="nv">$allowed_pages</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="nv">$page</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="s2">&#34;home.php&#34;</span><span class="p">;</span> <span class="c1">// 非法输入默认加载安全页面
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>我们可以跑起来看一下。
-<img src="/images/TOP10/XXE/xxe1.png"
-	
-	
-	
-	loading="lazy"
-	
-		alt="示例"
-	
-	
->
-这里是跑出来的，因为前面的注释掉看不到，所以这里就看的是源代码，然后用的payload是下面这个</p>
+</div><p>这里就会直接waf掉我们一开始的payload。我们还可以从配置上面入手，比如将open_basedir修改为一个路径，然后限制掉能够包含的路径，静止别的路径，以及在代码中限制。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
-</span></span><span class="line"><span class="cl">&lt;!DOCTYPE foo [
-</span></span><span class="line"><span class="cl">  &lt;!ELEMENT foo ANY&gt;
-</span></span><span class="line"><span class="cl">  &lt;!ENTITY xxe SYSTEM &#34;file:///D:/WEB/PHP/phpstudy_pro/WWW/xxe.php&#34;&gt;
-</span></span><span class="line"><span class="cl">]&gt;
-</span></span><span class="line"><span class="cl">&lt;foo&gt;&amp;xxe;&lt;/foo&gt;
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 安全版本：路径固化 + 文件名白名单
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 1. 接收用户输入（仅允许传入文件名前缀，如 home、about）
+</span></span></span><span class="line"><span class="cl"><span class="nv">$page</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 2. 定义合法文件名前缀白名单
+</span></span></span><span class="line"><span class="cl"><span class="nv">$allowed_prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span> <span class="s1">&#39;contact&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 3. 固化包含路径（核心修改点：路径固定为 ./pages/）
+</span></span></span><span class="line"><span class="cl"><span class="nv">$base_path</span> <span class="o">=</span> <span class="s1">&#39;./pages/&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 4. 校验输入并拼接路径
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$page</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">in_array</span><span class="p">(</span><span class="nv">$page</span><span class="p">,</span> <span class="nv">$allowed_prefixes</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 拼接固定路径 + 合法前缀 + 固定后缀 .php
+</span></span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="nv">$base_path</span> <span class="o">.</span> <span class="nv">$page</span> <span class="o">.</span> <span class="s1">&#39;.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 非法输入加载默认文件
+</span></span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="nv">$base_path</span> <span class="o">.</span> <span class="s1">&#39;home.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>这里就直接进行了任意文件读取。</p>
+</div><p>这个也是OK的，限制了路径。当然还有一些字符限制，协议限制等等，可以控制很多情况下的文件包含。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$page</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;page&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$allowed_pages</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;home.php&#39;</span><span class="p">,</span> <span class="s1">&#39;about.php&#39;</span><span class="p">,</span> <span class="s1">&#39;contact.php&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 补充修改：过滤输入中的路径遍历字符
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$page</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 替换 ../、\ 等危险字符
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$page</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">([</span><span class="s1">&#39;../&#39;</span><span class="p">,</span> <span class="s1">&#39;..\\&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;\\&#39;</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$page</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 仍需白名单校验（核心）
+</span></span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$page</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">in_array</span><span class="p">(</span><span class="nv">$page</span><span class="p">,</span> <span class="nv">$allowed_pages</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="nv">$page</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="s2">&#34;home.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这些都可以有效的限制一些文件包含漏洞。</p>
 <h1 id="危害">危害
-</h1><p>1、<strong>文件读取</strong>：定义一个包含文件内容的外部实体，然后在应用的响应里返回它。
-2、<strong>SSRF攻击</strong>：把外部实体定义成一个指向后端系统的URL，让服务器去访问它
-3、<strong>带外数据泄露</strong>：把服务器上的敏感数据偷偷地传到黑客控制的系统上。
-4、<strong>错误消息泄露</strong>：触发一个包含敏感数据的XML解析错误消息。</p>
-<h1 id="修复">修复
 </h1><ol>
-<li>最直接的修复：禁用外部实体加载器。在解析 XML 之前调用 libxml_disable_entity_loader(true)。这个函数会全局禁止所有 libxml 操作加载外部实体。</li>
-<li>针对 PHP 8.0+ 的推荐修复：使用 libxml_set_external_entity_loader()</li>
-<li>使用安全的解析选项：在 loadXML() 或 load() 时指定合适的选项，可以避免加载外部实体，但需要结合 libxml_disable_entity_loader 或实体加载器才能彻底阻断</li>
-<li>完全禁用 DTD 解析</li>
-<li>一些其他方式：
-输入验证：如果可能，对 XML 结构进行白名单验证，拒绝包含 <!DOCTYPE> 或外部实体的请求。
-最小权限原则：确保 Web 服务器运行账户对文件系统只有最小必要权限，防止读取敏感文件。
-使用替代格式：如果 XML 不是必须的，可考虑使用 JSON 等不易受到实体攻击的数据格式。</li>
+<li>包含日志文件获取webshell</li>
+<li>利用伪协议获取信息和获得敏感信息等操作。</li>
+<li>图⽚上传并包含图⽚shell</li>
+<li>php_ zip命令压缩协议获取webshell，获取压缩包中的木马文件</li>
+<li>phar://协议获取木马文件</li>
 </ol>
 
 </section>
@@ -458,18 +556,18 @@
             
                 
 <article class="has-image">
-    <a href="/p/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%95%B4%E7%90%86/">
+    <a href="/p/xxe%E6%95%B4%E7%90%86/">
         
         
             <div class="article-image">
                 
-                    <img src="/images/TOP10/include/include1.png" loading="lazy" data-key="" data-hash="/images/TOP10/include/include1.png"/>
+                    <img src="/images/TOP10/XXE/xxe1.png" loading="lazy" data-key="" data-hash="/images/TOP10/XXE/xxe1.png"/>
                 
             </div>
         
 
         <div class="article-details">
-            <h2 class="article-title">文件包含整理</h2>
+            <h2 class="article-title">XXE整理</h2>
         </div>
     </a>
 </article>

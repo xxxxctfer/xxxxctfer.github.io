@@ -3,16 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://xxxxctfer.github.io/</loc>
-    <lastmod>2026-03-02T00:00:00+00:00</lastmod>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/categories/</loc>
-    <lastmod>2026-03-02T00:00:00+00:00</lastmod>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/post/</loc>
-    <lastmod>2026-03-02T00:00:00+00:00</lastmod>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/p/sql%E6%B3%A8%E5%85%A5%E6%95%B4%E7%90%86/</loc>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/p/ssrf%E6%95%B4%E7%90%86/</loc>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/categories/web%E4%BA%BA/</loc>
-    <lastmod>2026-03-02T00:00:00+00:00</lastmod>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/p/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%95%B4%E7%90%86/</loc>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/p/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%95%B4%E7%90%86/</loc>
+    <lastmod>2026-03-04T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/p/xxe%E6%95%B4%E7%90%86/</loc>
     <lastmod>2026-03-02T00:00:00+00:00</lastmod>
