@@ -2,18 +2,18 @@
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="回顾一下TOP10，整理一下">
-<title>XXE整理</title>
+<title>SSTI整理</title>
 
-<link rel='canonical' href='https://xxxxctfer.github.io/p/xxe%E6%95%B4%E7%90%86/'>
+<link rel='canonical' href='https://xxxxctfer.github.io/p/ssti%E6%95%B4%E7%90%86/'>
 
-<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="XXE整理">
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="SSTI整理">
 <meta property='og:description' content="回顾一下TOP10，整理一下">
-<meta property='og:url' content='https://xxxxctfer.github.io/p/xxe%E6%95%B4%E7%90%86/'>
+<meta property='og:url' content='https://xxxxctfer.github.io/p/ssti%E6%95%B4%E7%90%86/'>
 <meta property='og:site_name' content='xxxx'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-02T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/TOP10/XXE/xxe1.png' />
-<meta name="twitter:title" content="XXE整理">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-06T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/TOP10/SSTI/ssti1.png' />
+<meta name="twitter:title" content="SSTI整理">
 <meta name="twitter:description" content="回顾一下TOP10，整理一下"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/TOP10/XXE/xxe1.png' />
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/TOP10/SSTI/ssti1.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -232,9 +232,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/xxe%E6%95%B4%E7%90%86/">
+            <a href="/p/ssti%E6%95%B4%E7%90%86/">
                 
-                    <img src="/images/TOP10/XXE/xxe1.png" loading="lazy" alt="Featured image of post XXE整理" />
+                    <img src="/images/TOP10/SSTI/ssti1.png" loading="lazy" alt="Featured image of post SSTI整理" />
                 
             </a>
         </div>
@@ -253,7 +253,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/xxe%E6%95%B4%E7%90%86/">XXE整理</a>
+            <a href="/p/ssti%E6%95%B4%E7%90%86/">SSTI整理</a>
         </h2>
     
         
@@ -279,7 +279,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-03-02T00:00:00Z'>2026-03-02</time>
+                <time class="article-time--published" datetime='2026-03-06T00:00:00Z'>2026-03-06</time>
             </div>
         
 
@@ -295,9 +295,9 @@
     <section class="article-content">
     
     
-    <p>总结一下这个半吊子的XXE漏洞，而且也好久没学了，看一下。</p>
+    <p>总结一下SSTI漏洞，从全名理解，是模板注入漏洞，两点点吧，一个是模板，一个是注入，也就是说这个漏洞是在一个模板的解析之下，由于恶意输入导致解析错误，形成注入的一种漏洞。</p>
 <h1 id="利用">利用
-</h1><p>先写一个代码来看看怎么回事吧。</p>
+</h1><p>写个测试代码吧，这个漏洞在PHP，python，Java中都有，这里写经典的python的。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -313,25 +313,30 @@
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 获取用户输入的 XML（例如来自 POST 请求）
-</span></span></span><span class="line"><span class="cl"><span class="nv">$xml</span> <span class="o">=</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="s1">&#39;php://input&#39;</span><span class="p">);</span>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 创建 DOMDocument 对象
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DOMDocument</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 启用外部实体处理（漏洞点）
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">substituteEntities</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>      <span class="c1">// 允许替换实体
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">loadXML</span><span class="p">(</span><span class="nv">$xml</span><span class="p">,</span> <span class="nx">LIBXML_NOENT</span><span class="p">);</span>    <span class="c1">// LIBXML_NOENT 会将实体替换为内容
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 输出解析后的内容
-</span></span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">saveXML</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
-</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 漏洞核心：直接将用户GET参数传入模板渲染函数，无任何过滤</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># name参数可控，攻击者可构造恶意模板语法</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Guest&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># render_template_string会解析模板语法，导致注入</span>
+</span></span><span class="line"><span class="cl">    <span class="n">html</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&#34;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&#34;</span>  <span class="c1"># 等价于 render_template_string(&#34;Hello, {{name}}!&#34;, name=name)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">app</span><span class="o">.</span><span class="n">jinja_env</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">html</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 运行服务：监听所有地址，端口5000，调试模式（方便复现）</span>
+</span></span><span class="line"><span class="cl">    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
-</div><p>我们可以跑起来看一下。
-<img src="/images/TOP10/XXE/xxe1.png"
+</div><p><img src="/images/TOP10/SSTI/ssti1.png"
 	
 	
 	
@@ -341,42 +346,62 @@
 	
 	
 >
-这里是跑出来的，因为前面的注释掉看不到，所以这里就看的是源代码，然后用的payload是下面这个</p>
-<div class="highlight"><div class="chroma">
+很明显的一个存在漏洞的情况啊，然后我们可以打一下rce的链子看看。
+<img src="/images/TOP10/SSTI/ssti2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+很简单一个打法啊，config直接获取，然后往下面打的。</p>
+<h1 id="危害">危害
+</h1><p>SSTI的危害主要看目的是什么，大致可以是以下几种吧。</p>
+<ol>
+<li>进行命令执行，拿下服务器权限</li>
+<li>任意文件读取，读取敏感信息</li>
+<li>打内存马，也是拿服务器权限
+应该主要是这些。</li>
+</ol>
+<h1 id="修复">修复
+</h1><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
-</span></span><span class="line"><span class="cl">&lt;!DOCTYPE foo [
-</span></span><span class="line"><span class="cl">  &lt;!ELEMENT foo ANY&gt;
-</span></span><span class="line"><span class="cl">  &lt;!ENTITY xxe SYSTEM &#34;file:///D:/WEB/PHP/phpstudy_pro/WWW/xxe.php&#34;&gt;
-</span></span><span class="line"><span class="cl">]&gt;
-</span></span><span class="line"><span class="cl">&lt;foo&gt;&amp;xxe;&lt;/foo&gt;
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">render_template_string</span>  <span class="c1"># 导入规范的渲染函数</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app.route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 获取用户输入（无需手动escape，Jinja2会自动转义）</span>
+</span></span><span class="line"><span class="cl">    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;Guest&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># 核心修复：将用户输入作为变量传入，而非拼接模板字符串</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># &#34;Hello, {{name}}!&#34; 是固定模板，name是纯文本变量，不会被解析为模板语法</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">render_template_string</span><span class="p">(</span><span class="s2">&#34;Hello, {{name}}!&#34;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>这里就直接进行了任意文件读取。</p>
-<h1 id="危害">危害
-</h1><p>1、<strong>文件读取</strong>：定义一个包含文件内容的外部实体，然后在应用的响应里返回它。
-2、<strong>SSRF攻击</strong>：把外部实体定义成一个指向后端系统的URL，让服务器去访问它
-3、<strong>带外数据泄露</strong>：把服务器上的敏感数据偷偷地传到黑客控制的系统上。
-4、<strong>错误消息泄露</strong>：触发一个包含敏感数据的XML解析错误消息。</p>
-<h1 id="修复">修复
-</h1><ol>
-<li>最直接的修复：禁用外部实体加载器。在解析 XML 之前调用 libxml_disable_entity_loader(true)。这个函数会全局禁止所有 libxml 操作加载外部实体。</li>
-<li>针对 PHP 8.0+ 的推荐修复：使用 libxml_set_external_entity_loader()</li>
-<li>使用安全的解析选项：在 loadXML() 或 load() 时指定合适的选项，可以避免加载外部实体，但需要结合 libxml_disable_entity_loader 或实体加载器才能彻底阻断</li>
-<li>完全禁用 DTD 解析</li>
-<li>一些其他方式：
-输入验证：如果可能，对 XML 结构进行白名单验证，拒绝包含 <!DOCTYPE> 或外部实体的请求。
-最小权限原则：确保 Web 服务器运行账户对文件系统只有最小必要权限，防止读取敏感文件。
-使用替代格式：如果 XML 不是必须的，可考虑使用 JSON 等不易受到实体攻击的数据格式。</li>
-</ol>
+</div><p>这个修复还是有挺多的，这个应该算比较彻底的一种了，直接变成字符串输出。还可以加上一些黑白名单，这里就没有加了，基本上就是一些关键词，还有{{，}}之类的过滤。</p>
 
 </section>
 
@@ -439,25 +464,6 @@
             
                 
 <article class="has-image">
-    <a href="/p/ssti%E6%95%B4%E7%90%86/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/images/TOP10/SSTI/ssti1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SSTI/ssti1.png"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">SSTI整理</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
     <a href="/p/sql%E6%B3%A8%E5%85%A5%E6%95%B4%E7%90%86/">
         
         
@@ -489,6 +495,25 @@
 
         <div class="article-details">
             <h2 class="article-title">SSRF整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/upload/upload1.png" loading="lazy" data-key="" data-hash="/images/TOP10/upload/upload1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">文件上传整理</h2>
         </div>
     </a>
 </article>

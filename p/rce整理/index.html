@@ -2,18 +2,18 @@
 <html lang="en-us" dir="ltr">
     <head><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="回顾一下TOP10，整理一下">
-<title>XXE整理</title>
+<title>RCE整理</title>
 
-<link rel='canonical' href='https://xxxxctfer.github.io/p/xxe%E6%95%B4%E7%90%86/'>
+<link rel='canonical' href='https://xxxxctfer.github.io/p/rce%E6%95%B4%E7%90%86/'>
 
-<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="XXE整理">
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="RCE整理">
 <meta property='og:description' content="回顾一下TOP10，整理一下">
-<meta property='og:url' content='https://xxxxctfer.github.io/p/xxe%E6%95%B4%E7%90%86/'>
+<meta property='og:url' content='https://xxxxctfer.github.io/p/rce%E6%95%B4%E7%90%86/'>
 <meta property='og:site_name' content='xxxx'>
-<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-02T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-02T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/TOP10/XXE/xxe1.png' />
-<meta name="twitter:title" content="XXE整理">
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-06T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-06T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/TOP10/RCE/rce1.png' />
+<meta name="twitter:title" content="RCE整理">
 <meta name="twitter:description" content="回顾一下TOP10，整理一下"><meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/TOP10/XXE/xxe1.png' />
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/TOP10/RCE/rce1.png' />
     <link rel="shortcut icon" href="/favicon.ico" />
 
     </head>
@@ -232,9 +232,9 @@
     <article class="has-image main-article">
     <header class="article-header">
         <div class="article-image">
-            <a href="/p/xxe%E6%95%B4%E7%90%86/">
+            <a href="/p/rce%E6%95%B4%E7%90%86/">
                 
-                    <img src="/images/TOP10/XXE/xxe1.png" loading="lazy" alt="Featured image of post XXE整理" />
+                    <img src="/images/TOP10/RCE/rce1.png" loading="lazy" alt="Featured image of post RCE整理" />
                 
             </a>
         </div>
@@ -253,7 +253,7 @@
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/p/xxe%E6%95%B4%E7%90%86/">XXE整理</a>
+            <a href="/p/rce%E6%95%B4%E7%90%86/">RCE整理</a>
         </h2>
     
         
@@ -279,7 +279,7 @@
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-03-02T00:00:00Z'>2026-03-02</time>
+                <time class="article-time--published" datetime='2026-03-06T00:00:00Z'>2026-03-06</time>
             </div>
         
 
@@ -295,9 +295,54 @@
     <section class="article-content">
     
     
-    <p>总结一下这个半吊子的XXE漏洞，而且也好久没学了，看一下。</p>
+    <p>说实在话的，RCE没有什么特别好总结的，简单讲讲危害算了。</p>
+<h1 id="危害">危害
+</h1><ol>
+<li>webshell权限，获取服务器的控制权</li>
+<li>任意读写文件，帮助其他漏洞的利用</li>
+<li>权限提升和权限维持，以及持续后门</li>
+</ol>
+<p>基本上来说，RCE漏洞就意味着服务器的权限已经拿到了，很少有人会在RCE漏洞的后面加过滤了，如果非要执行命令，那会在一开始的时候加过滤，绕过之后写文件进去就行。</p>
 <h1 id="利用">利用
-</h1><p>先写一个代码来看看怎么回事吧。</p>
+</h1><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 漏洞点：直接将用户GET参数传入eval执行，无任何过滤
+</span></span></span><span class="line"><span class="cl"><span class="nv">$code</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;cmd&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$code</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">eval</span><span class="p">(</span><span class="s2">&#34;echo &#39;执行结果：&#39;; &#34;</span> <span class="o">.</span> <span class="nv">$code</span> <span class="o">.</span> <span class="s2">&#34;;&#34;</span><span class="p">);</span> <span class="c1">// $code可控，触发RCE
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/TOP10/RCE/rce1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+代码层面的rce漏洞大概跟这个差不多，主要就是eval函数的调用之类的，导致可以控制写入命令执行的函数，然后直接执行。</p>
+<h1 id="修复">修复
+</h1><p>在不影响功能的前提下修复代码，基本上就是下面这几种方法。</p>
+<ol>
+<li>采用白名单机制（仅允许执行指定的代码 / 命令），拒绝黑名单（黑名单易被绕过）</li>
+<li>过滤特殊字符，禁止命令 / 代码拼接</li>
+<li>最小权限原则（运行 PHP 的服务器用户仅拥有必要权限，避免 root / 管理员权限）
+如果只执行PHP函数的话，可以用这种白名单修复。</li>
+</ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -313,25 +358,69 @@
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 获取用户输入的 XML（例如来自 POST 请求）
-</span></span></span><span class="line"><span class="cl"><span class="nv">$xml</span> <span class="o">=</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="s1">&#39;php://input&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 创建 DOMDocument 对象
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DOMDocument</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// 启用外部实体处理（漏洞点）
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">substituteEntities</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>      <span class="c1">// 允许替换实体
-</span></span></span><span class="line"><span class="cl"><span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">loadXML</span><span class="p">(</span><span class="nv">$xml</span><span class="p">,</span> <span class="nx">LIBXML_NOENT</span><span class="p">);</span>    <span class="c1">// LIBXML_NOENT 会将实体替换为内容
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// 输出解析后的内容
-</span></span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">$dom</span><span class="o">-&gt;</span><span class="na">saveXML</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$code</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;cmd&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$code</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 仅允许指定的安全操作（白名单）
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$allowed_operations</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;phpinfo&#39;</span><span class="p">];</span> <span class="c1">// 仅允许执行phpinfo
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$code</span><span class="p">,</span> <span class="nv">$allowed_operations</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 2. 避免直接拼接代码，用函数调用方式
+</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$code</span> <span class="o">==</span> <span class="s1">&#39;phpinfo&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">phpinfo</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">die</span><span class="p">(</span><span class="s2">&#34;错误：仅允许执行 &#34;</span> <span class="o">.</span> <span class="nx">implode</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="nv">$allowed_operations</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&#34; 操作&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>我们可以跑起来看一下。
-<img src="/images/TOP10/XXE/xxe1.png"
+</div><p>如果要执行系统命令，用这种修复。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$cmd</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;command&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 1. 命令白名单：仅允许指定的安全命令
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$allowed_cmds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ipconfig&#39;</span><span class="p">,</span> <span class="s1">&#39;dir&#39;</span><span class="p">,</span> <span class="s1">&#39;ls&#39;</span><span class="p">,</span> <span class="s1">&#39;whoami&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 2. 过滤特殊字符：禁止拼接额外命令
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$cmd</span> <span class="o">=</span> <span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;/[;|&amp;&lt;&gt;$\`]/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$cmd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// 3. 校验命令是否在白名单内
+</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">,</span> <span class="nv">$allowed_cmds</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;&lt;pre&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">system</span><span class="p">(</span><span class="nv">$cmd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;&lt;/pre&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">die</span><span class="p">(</span><span class="s2">&#34;错误：仅允许执行 &#34;</span> <span class="o">.</span> <span class="nx">implode</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="nv">$allowed_cmds</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&#34; 命令&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/TOP10/RCE/rce2.png"
 	
 	
 	
@@ -340,43 +429,7 @@
 		alt="示例"
 	
 	
->
-这里是跑出来的，因为前面的注释掉看不到，所以这里就看的是源代码，然后用的payload是下面这个</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
-</span></span><span class="line"><span class="cl">&lt;!DOCTYPE foo [
-</span></span><span class="line"><span class="cl">  &lt;!ELEMENT foo ANY&gt;
-</span></span><span class="line"><span class="cl">  &lt;!ENTITY xxe SYSTEM &#34;file:///D:/WEB/PHP/phpstudy_pro/WWW/xxe.php&#34;&gt;
-</span></span><span class="line"><span class="cl">]&gt;
-</span></span><span class="line"><span class="cl">&lt;foo&gt;&amp;xxe;&lt;/foo&gt;
-</span></span></code></pre></td></tr></table>
-</div>
-</div><p>这里就直接进行了任意文件读取。</p>
-<h1 id="危害">危害
-</h1><p>1、<strong>文件读取</strong>：定义一个包含文件内容的外部实体，然后在应用的响应里返回它。
-2、<strong>SSRF攻击</strong>：把外部实体定义成一个指向后端系统的URL，让服务器去访问它
-3、<strong>带外数据泄露</strong>：把服务器上的敏感数据偷偷地传到黑客控制的系统上。
-4、<strong>错误消息泄露</strong>：触发一个包含敏感数据的XML解析错误消息。</p>
-<h1 id="修复">修复
-</h1><ol>
-<li>最直接的修复：禁用外部实体加载器。在解析 XML 之前调用 libxml_disable_entity_loader(true)。这个函数会全局禁止所有 libxml 操作加载外部实体。</li>
-<li>针对 PHP 8.0+ 的推荐修复：使用 libxml_set_external_entity_loader()</li>
-<li>使用安全的解析选项：在 loadXML() 或 load() 时指定合适的选项，可以避免加载外部实体，但需要结合 libxml_disable_entity_loader 或实体加载器才能彻底阻断</li>
-<li>完全禁用 DTD 解析</li>
-<li>一些其他方式：
-输入验证：如果可能，对 XML 结构进行白名单验证，拒绝包含 <!DOCTYPE> 或外部实体的请求。
-最小权限原则：确保 Web 服务器运行账户对文件系统只有最小必要权限，防止读取敏感文件。
-使用替代格式：如果 XML 不是必须的，可考虑使用 JSON 等不易受到实体攻击的数据格式。</li>
-</ol>
+></p>
 
 </section>
 
@@ -413,25 +466,6 @@
 
         <div class="article-details">
             <h2 class="article-title">PHP反序列化整理整理</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/rce%E6%95%B4%E7%90%86/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/images/TOP10/RCE/rce1.png" loading="lazy" data-key="" data-hash="/images/TOP10/RCE/rce1.png"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">RCE整理</h2>
         </div>
     </a>
 </article>
@@ -489,6 +523,25 @@
 
         <div class="article-details">
             <h2 class="article-title">SSRF整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/upload/upload1.png" loading="lazy" data-key="" data-hash="/images/TOP10/upload/upload1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">文件上传整理</h2>
         </div>
     </a>
 </article>

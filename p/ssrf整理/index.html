@@ -332,8 +332,8 @@
 </span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>还是很简单一个漏洞点啊。弄下来吧。
-<img src="/images/TOP10/SSRF/ssrf1.png"
+</div><p>还是很简单一个漏洞点啊。弄下来吧。</p>
+<p><img src="/images/TOP10/SSRF/ssrf1.png"
 	
 	
 	
@@ -342,8 +342,8 @@
 		alt="示例"
 	
 	
->
-很明显可以看到，如果这个是在外网的情况下，是可以任意访问内网的资源的，当然这个说起来还是有些抽象。因为这里只显示了访问文件这一种，但是实际上非80端口的，其他端口的服务资源，都是可以使用的，因此SSRF的危害范围非常广泛。</p>
+></p>
+<p>很明显可以看到，如果这个是在外网的情况下，是可以任意访问内网的资源的，当然这个说起来还是有些抽象。因为这里只显示了访问文件这一种，但是实际上非80端口的，其他端口的服务资源，都是可以使用的，因此SSRF的危害范围非常广泛。</p>
 <h1 id="危害">危害
 </h1><p>SSRF的危害还是比较简单的吧，光是能用代码访问内网资源危害及很大了。具体一点有哪些危害呢。</p>
 <ol>
@@ -430,7 +430,17 @@
 </span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>![[ssrf2.png]]这个是可以绕过的，但是还是有一定修复效果的，主要是懒了，懒得把绕过的什么都都过滤掉。</p>
+</div><p><img src="/images/TOP10/SSRF/ssrf2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+这个是可以绕过的，但是还是有一定修复效果的，主要是懒了，懒得把绕过的什么都都过滤掉。</p>
 
 </section>
 
@@ -452,6 +462,63 @@
     <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%95%B4%E7%90%86%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/serialize/serialize1.png" loading="lazy" data-key="" data-hash="/images/TOP10/serialize/serialize1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">PHP反序列化整理整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/rce%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/RCE/rce1.png" loading="lazy" data-key="" data-hash="/images/TOP10/RCE/rce1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">RCE整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/ssti%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/SSTI/ssti1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SSTI/ssti1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SSTI整理</h2>
+        </div>
+    </a>
+</article>
+
             
                 
 <article class="has-image">
@@ -486,63 +553,6 @@
 
         <div class="article-details">
             <h2 class="article-title">文件上传整理</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%95%B4%E7%90%86/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/images/TOP10/include/include1.png" loading="lazy" data-key="" data-hash="/images/TOP10/include/include1.png"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">文件包含整理</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/xxe%E6%95%B4%E7%90%86/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/images/TOP10/XXE/xxe1.png" loading="lazy" data-key="" data-hash="/images/TOP10/XXE/xxe1.png"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">XXE整理</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/csrf%E6%95%B4%E7%90%86/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/images/TOP10/CSRF/csrf1.png" loading="lazy" data-key="" data-hash="/images/TOP10/CSRF/csrf1.png"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">CSRF整理</h2>
         </div>
     </a>
 </article>
