@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="简简单单打个靶场">
+<title>红日靶场练习(第二章)</title>
+
+<link rel='canonical' href='https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%BA%8C%E7%AB%A0/'>
+
+<link rel="stylesheet" href="/scss/style.min.1ae76ab9aa3beab52f99d9b5f59d64d06778453e93ff523a98332d15179df142.css"><meta property='og:title' content="红日靶场练习(第二章)">
+<meta property='og:description' content="简简单单打个靶场">
+<meta property='og:url' content='https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%BA%8C%E7%AB%A0/'>
+<meta property='og:site_name' content='xxxx'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2026-04-14T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2026-04-14T00:00:00&#43;00:00'/><meta property='og:image' content='https://xxxxctfer.github.io/images/hongri/Attack2/%E9%9D%B6%E5%9C%BA2.18.png' />
+<meta name="twitter:title" content="红日靶场练习(第二章)">
+<meta name="twitter:description" content="简简单单打个靶场"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://xxxxctfer.github.io/images/hongri/Attack2/%E9%9D%B6%E5%9C%BA2.18.png' />
+    <link rel="shortcut icon" href="/favicon.ico" />
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_a014c1f4876185e.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">🥰</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">xxxx</a></h1>
+            <h2 class="site-description">一个还在努力的xxxx</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/xxxxctfer'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E9%93%BE/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友链</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc stack-toc">
+            <ol class="toc-level-1"><li class="toc-item-h1">
+                        <a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba%0a%3c%2fh1%3e" aria-label="环境搭建 ">环境搭建 </a><li class="toc-item-h1">
+                        <a href="#web%e6%9c%baWEB%e6%9c%ba%0a%3c%2fh1%3e" aria-label="WEB机 ">WEB机 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%0a%3c%2fh2%3e" aria-label="信息收集 ">信息收集 </a><li class="toc-item-h2">
+                        <a href="#web%e6%9c%8d%e5%8a%a1web%e6%9c%8d%e5%8a%a1%0a%3c%2fh2%3e" aria-label="web服务 ">web服务 </a></ol></li><li class="toc-item-h1">
+                        <a href="#%e5%86%85%e7%bd%91%e6%94%bb%e5%87%bb%e5%86%85%e7%bd%91%e6%94%bb%e5%87%bb%0a%3c%2fh1%3e" aria-label="内网攻击 ">内网攻击 </a><ol class="toc-level-2"><li class="toc-item-h2">
+                        <a href="#cs%e4%b8%8a%e7%ba%bfCS%e4%b8%8a%e7%ba%bf%0a%3c%2fh2%3e" aria-label="CS上线 ">CS上线 </a><li class="toc-item-h2">
+                        <a href="#%e6%9d%83%e9%99%90%e7%bb%b4%e6%8c%81%e6%9d%83%e9%99%90%e7%bb%b4%e6%8c%81%0a%3c%2fh2%3e" aria-label="权限维持 ">权限维持 </a><li class="toc-item-h2">
+                        <a href="#%e5%86%85%e7%bd%91%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%e5%86%85%e7%bd%91%e4%bf%a1%e6%81%af%e6%94%b6%e9%9b%86%0a%3c%2fh2%3e" aria-label="内网信息收集 ">内网信息收集 </a><li class="toc-item-h2">
+                        <a href="#%e6%a8%aa%e5%90%91%e6%94%bb%e5%87%bb%e6%a8%aa%e5%90%91%e6%94%bb%e5%87%bb%0a%3c%2fh2%3e" aria-label="横向攻击 ">横向攻击 </a><li class="toc-item-h2">
+                        <a href="#%e9%bb%84%e9%87%91%e7%a5%a8%e6%8d%ae%e9%bb%84%e9%87%91%e7%a5%a8%e6%8d%ae%0a%3c%2fh2%3e" aria-label="黄金票据 ">黄金票据 </a><li class="toc-item-h2">
+                        <a href="#%e9%87%8d%e6%89%93%e7%a5%a8%e6%8d%ae%e9%87%8d%e6%89%93%e7%a5%a8%e6%8d%ae%0a%3c%2fh2%3e" aria-label="重打票据 ">重打票据 </a></ol></li></ol></li></div>
+    </section>
+
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%BA%8C%E7%AB%A0/">
+                
+                    <img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.18.png" loading="lazy" alt="Featured image of post 红日靶场练习(第二章)" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/web%E4%BA%BA/" >
+                Web人
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%BA%8C%E7%AB%A0/">红日靶场练习(第二章)</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            简简单单打个靶场
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-04-14T00:00:00Z'>2026-04-14</time>
+            </div>
+        
+
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>来，接着打。</p>
+<h1 id="环境搭建">环境搭建
+</h1><p>先配置网段，是10.10.10.0的网段。然后配置虚拟机。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.1.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，配置一下三台虚拟机。
+PC的配置：
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.2.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+DC的配置：
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.3.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+WEB的配置：
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.4.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+OK，配置大概是这样，然后我们打开虚拟机操作一下。
+这里因为开了NAT的两台主机，自己设置了IP，但是网段跟我们自己的NAT的网段不一样，所以我们需要进去配置一下。登录的密码是：1qaz@WSX(WEB这台设备需要切换用户 de1ay 或者 Administrator 才能登陆)但是其实也可以修改你的NAT的网段，跟他对应上就行，我这里是试一下修改IP。
+PC修改：
+我们使用Win+R，然后输入<code>ncpa.cpl</code>，就可以开启网络连接的控制面板。然后选中本地连接，不是域的那个连接点击属性进行修改。需要输入账号密码，默认是：administrator/1qaz@WSX。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.5.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+输入之后找到对应的选项，打开属性进行修改。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.6.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+配置成我们NAT的网段就行。</p>
+<p><img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.7.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>然后确定，就可以看是否成功了。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.8.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+OK，这里就配置好了，前面貌似默认网关错了，但是我懒得再截图了，体量一下，下面这里的默认网关修改了。
+WEB修改：
+对了，再提醒一下，这台机子需要自己更换用户的，操作差不多，步骤省略一下。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.9.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+OK，检查一下。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.10.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+OK，剩下一个主机我们也可以看看IP是否正常。
+DC：
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.11.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+OK，IP都配置成功了，NAT的也没有问题了，我们把服务开起来。在WEB虚拟机当中，进到<code>C:\Oracle\Middleware\user_projects\domains\base_domain</code>中，去开启服务
+这里大部分文章都是让我们直接去管理员运行，建议是先运行一下试试，如果报错，根据下面的这篇文章进行修改。
+<a class="link" href="https://blog.csdn.net/weixin_33737774/article/details/159898132"  target="_blank" rel="noopener"
+    >https://blog.csdn.net/weixin_33737774/article/details/159898132</a>
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.12.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+我这里直接跑起来了，所以就不检查问题所在了。</p>
+<h1 id="web机">WEB机
+</h1><p>我们进行一下信息收集，只知道IP是<code>192.168.200.80</code>
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.13.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+可以看到有服务，但是没什么信息，还是先进行信息收集吧。</p>
+<h2 id="信息收集">信息收集
+</h2><p>当正常信息收集来做，先探测存活主机。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">arp-scan -l
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.14.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+发现两个存活主机，进行端口探测。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -p- IP
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以得知系统版本和漏洞信息</span>
+</span></span><span class="line"><span class="cl">nmap -A -v IP
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.15.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+开的很多啊，我们简单分析一下，80端口和7001端口是web服务，7001是weblogic的服务，然后445是smb的端口，1433是mysql的端口，3389是远程控制的端口。我们主要还是从web服务打进去，别的估计都还有防火墙保着的。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.16.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+看一下这个201的主机，没开web服务，前面说的一些都有，问题不大，我们先打这个80的主机。</p>
+<h2 id="web服务">web服务
+</h2><p>前面知道开了80端口和7001端口，直接去访问啥都没有，我们来扫一下目录。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.17.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+OK，80端口没扫到什么东西，7001端口倒是东西挺多的，我们直接去看这边的东西。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.18.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+很简单可以看出是weblogic的一个框架(其实7001端口可以看出来，这里是多看了一步再下判断)
+可以看到有版本，我们直接用工具看有没有漏洞可以直接利用。
+工具链接：https://github.com/KimJun1010/WeblogicTool
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.19.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>这个检查一个漏洞，有了就直接停了，但是问题不大，反正可以用就行。然后这里可以选择shell上次或者内存马注入，shell上传的话，需要一个jsp木马，我们来试试内存马注入能不能用。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.20.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+可以访问看下有没有注入进去，可以访问我们就可以直接进行连接。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.21.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+成功连上哥斯拉，拿到内存马。</p>
+<h1 id="内网攻击">内网攻击
+</h1><p>OK，拿到服务器的权限之后我们就要往内网打了。</p>
+<h2 id="cs上线">CS上线
+</h2><p>拿到内存马之后我们就可以准备上线CS了。因为我们这里权限够，可以直接去关闭防火墙，方便后面上线。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">netsh advfirewall show all state  		  //查看防火墙状态
+</span></span><span class="line"><span class="cl">netsh firewall <span class="nb">set</span> opmode disable             <span class="c1">#winsows server 2003 之前</span>
+</span></span><span class="line"><span class="cl">netsh advfirewall <span class="nb">set</span> allprofiles state off   <span class="c1">#winsows server 2003 之后</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>但是这里好像是已经关掉了，而且哥斯拉这里会乱码，因为回显是gbk编码，而哥斯拉默认UTF-8编码接收，所以直接乱码了，我们去虚拟机里面执行看看。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.22.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>OK啊，全开的，我们弄一个镜像留着，到时候回来试试，开着防火墙可不可以上CS。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.23.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+OK，防火墙关掉了，我们上线CS。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.24.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>简单上线CS。</p>
+<h2 id="权限维持">权限维持
+</h2><p>依旧权限维持，简单选择一下。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.25.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+选一个顺眼的。这里还是选了<code>2564  2024  explorer.exe  x64   1   DE1AY\de1ay</code>这个，直接inject就行。
+注入了一下，结果发现权限不够，难绷。</p>
+<p><img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.26.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>OK，我们再注入一下。(难绷，这里注入进来之后权限掉了，刚刚没注意看，这个是普通用户，重新来了一遍，这里最好用spawn x64，要用inject也要去用高权限的cmd文件)
+更新图片：
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.28.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+原图片：
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.27.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>简单处理一下后续。(这里kill错值了，应该kill 1780的，问题不大，后面还是kill了)</p>
+<h2 id="内网信息收集">内网信息收集
+</h2><p>OK，我们现在来进行一下内网的信息收集，步骤省略，直接给出结果。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">权限：
+</span></span><span class="line"><span class="cl"><span class="o">[</span>04/13 22:25:57<span class="o">]</span> beacon&gt; getuid
+</span></span><span class="line"><span class="cl"><span class="o">[</span>04/13 22:25:57<span class="o">]</span> <span class="o">[</span>*<span class="o">]</span> Tasked beacon to get userid
+</span></span><span class="line"><span class="cl"><span class="o">[</span>04/13 22:25:58<span class="o">]</span> <span class="o">[</span>+<span class="o">]</span> host called home, sent: <span class="m">8</span> bytes
+</span></span><span class="line"><span class="cl"><span class="o">[</span>04/13 22:25:58<span class="o">]</span> <span class="o">[</span>*<span class="o">]</span> You are NT AUTHORITY<span class="se">\S</span>YSTEM <span class="o">(</span>admin<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">域：
+</span></span><span class="line"><span class="cl">   DNS 后缀搜索列表  . . . . . . . . : de1ay.com
+</span></span><span class="line"><span class="cl">   IPv4 地址 . . . . . . . . . . . . : 10.10.10.80<span class="o">(</span>首选<span class="o">)</span> 
+</span></span><span class="line"><span class="cl">   DNS 服务器  . . . . . . . . . . . : 10.10.10.10
+</span></span><span class="line"><span class="cl">   没有域权限，用户什么的基本查不了。直接扫描
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.29.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>扫一会吧，看看有啥东西。(这里查文章的时候还看到一个工具，感觉不错，有时间看看：AdFind是一款在 Windows <strong>Active Directory (AD)</strong> 域环境中非常流行的免费<strong>命令行查询工具</strong>，主要用于高效地检索和管理域内的各类信息)</p>
+<p><img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.30.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>还是扫出来了内网的主机，分别是<code>10.10.10.10</code>，和<code>10.10.10.201</code>，这个201应该是我们之前看到的另一个主机，那么大概率，这个10是域控了。</p>
+<h2 id="横向攻击">横向攻击
+</h2><p>前面收集的时候也可以看到啊，是有445端口开放的，大概率有smb，我们来抓一下密码。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.31.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>可以看到全拿到了啊，我们直接横向。(这里拿到的密码比较多，因为还有mysql服务和远程控制的密码也都抓到了，进行横向的时候注意辨别哪个是密码)
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.32.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+大概就是这样的，然后直接连接。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.33.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>成功拿下整个域环境。</p>
+<h2 id="黄金票据">黄金票据
+</h2><p>还是老规矩，确认用户名，域名，sid，即可生成黄金票据。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.34.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>build出来，然后测试一下。(这里run klist查不出来了，不知道为什么，用了另外一个命令)
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.35.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+></p>
+<p>这里好像生成的有点问题，重新手打才生成出来。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.36.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>
+有点奇怪，再看看。(到这里环境有点乱了，思路也乱了，重新开了一遍靶场，重打了一遍)</p>
+<h2 id="重打票据">重打票据
+</h2><p>建议换命令打</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mimikatz lsadump::lsa /inject /name:krbtgt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后就可以看到域SID了。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.37.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>OK，我们再去生成一下票据。
+<img src="/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.38.png"
+	
+	
+	
+	loading="lazy"
+	
+		alt="示例"
+	
+	
+>OK，生成成功了，然后我们直接把他下载下来就行。感觉很怪啊，但是这里确实又是域控。很奇怪，但是问题不大，不管了。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">相关文章</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="has-image">
+    <a href="/p/nacos%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/nacos/nacos1.png" loading="lazy" data-key="" data-hash="/images/nacos/nacos1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">nacos历史漏洞复现</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/docker%E9%80%83%E9%80%B8%E5%AD%A6%E4%B9%A0/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/docker/docker1.png" loading="lazy" data-key="" data-hash="/images/docker/docker1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">docker逃逸学习</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E5%86%85%E7%BD%91%E9%80%9A%E4%BF%A1%E9%9A%A7%E9%81%93%E5%AD%A6%E4%B9%A0/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/hongri/suidao/suidao2.png" loading="lazy" data-key="" data-hash="/images/hongri/suidao/suidao2.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">内网通信隧道学习</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.3.png" loading="lazy" data-key="" data-hash="/images/hongri/Attack1/靶场1.3.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">红日靶机练习(第一章)</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
+    <a href="/p/%E6%81%B6%E6%84%8Fso%E5%8A%A0%E8%BD%BD%E8%8A%B1%E6%B4%BB/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/CTF/so/so1.png" loading="lazy" data-key="" data-hash="/images/CTF/so/so1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">恶意so加载(花活)</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 xxxx
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.33.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.c922af694cc257bf1ecc41c0dd7b0430f9114ec280ccf67cd2c6ad55f5316c4e.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

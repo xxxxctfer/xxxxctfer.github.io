@@ -7,7 +7,531 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>en-us</language>
         <copyright>xxxx</copyright>
-        <lastBuildDate>Thu, 09 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Tue, 14 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://xxxxctfer.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>红日靶场练习(第二章)</title>
+        <link>https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%BA%8C%E7%AB%A0/</link>
+        <pubDate>Tue, 14 Apr 2026 00:00:00 +0000</pubDate>
+        
+        <guid>https://xxxxctfer.github.io/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%BA%8C%E7%AB%A0/</guid>
+        <description>&lt;img src="https://xxxxctfer.github.io/images/hongri/Attack2/%E9%9D%B6%E5%9C%BA2.18.png" alt="Featured image of post 红日靶场练习(第二章)" /&gt;&lt;p&gt;来，接着打。&lt;/p&gt;
+&lt;h1 id=&#34;环境搭建&#34;&gt;环境搭建
+&lt;/h1&gt;&lt;p&gt;先配置网段，是10.10.10.0的网段。然后配置虚拟机。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.1.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，配置一下三台虚拟机。
+PC的配置：
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.2.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+DC的配置：
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.3.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+WEB的配置：
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.4.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+OK，配置大概是这样，然后我们打开虚拟机操作一下。
+这里因为开了NAT的两台主机，自己设置了IP，但是网段跟我们自己的NAT的网段不一样，所以我们需要进去配置一下。登录的密码是：1qaz@WSX(WEB这台设备需要切换用户 de1ay 或者 Administrator 才能登陆)但是其实也可以修改你的NAT的网段，跟他对应上就行，我这里是试一下修改IP。
+PC修改：
+我们使用Win+R，然后输入&lt;code&gt;ncpa.cpl&lt;/code&gt;，就可以开启网络连接的控制面板。然后选中本地连接，不是域的那个连接点击属性进行修改。需要输入账号密码，默认是：administrator/1qaz@WSX。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.5.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+输入之后找到对应的选项，打开属性进行修改。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.6.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+配置成我们NAT的网段就行。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.7.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;然后确定，就可以看是否成功了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.8.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+OK，这里就配置好了，前面貌似默认网关错了，但是我懒得再截图了，体量一下，下面这里的默认网关修改了。
+WEB修改：
+对了，再提醒一下，这台机子需要自己更换用户的，操作差不多，步骤省略一下。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.9.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+OK，检查一下。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.10.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+OK，剩下一个主机我们也可以看看IP是否正常。
+DC：
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.11.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+OK，IP都配置成功了，NAT的也没有问题了，我们把服务开起来。在WEB虚拟机当中，进到&lt;code&gt;C:\Oracle\Middleware\user_projects\domains\base_domain&lt;/code&gt;中，去开启服务
+这里大部分文章都是让我们直接去管理员运行，建议是先运行一下试试，如果报错，根据下面的这篇文章进行修改。
+&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/weixin_33737774/article/details/159898132&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;https://blog.csdn.net/weixin_33737774/article/details/159898132&lt;/a&gt;
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.12.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+我这里直接跑起来了，所以就不检查问题所在了。&lt;/p&gt;
+&lt;h1 id=&#34;web机&#34;&gt;WEB机
+&lt;/h1&gt;&lt;p&gt;我们进行一下信息收集，只知道IP是&lt;code&gt;192.168.200.80&lt;/code&gt;
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.13.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+可以看到有服务，但是没什么信息，还是先进行信息收集吧。&lt;/p&gt;
+&lt;h2 id=&#34;信息收集&#34;&gt;信息收集
+&lt;/h2&gt;&lt;p&gt;当正常信息收集来做，先探测存活主机。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;arp-scan -l
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.14.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+发现两个存活主机，进行端口探测。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nmap -p- IP
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 可以得知系统版本和漏洞信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;nmap -A -v IP
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.15.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+开的很多啊，我们简单分析一下，80端口和7001端口是web服务，7001是weblogic的服务，然后445是smb的端口，1433是mysql的端口，3389是远程控制的端口。我们主要还是从web服务打进去，别的估计都还有防火墙保着的。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.16.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+看一下这个201的主机，没开web服务，前面说的一些都有，问题不大，我们先打这个80的主机。&lt;/p&gt;
+&lt;h2 id=&#34;web服务&#34;&gt;web服务
+&lt;/h2&gt;&lt;p&gt;前面知道开了80端口和7001端口，直接去访问啥都没有，我们来扫一下目录。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.17.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+OK，80端口没扫到什么东西，7001端口倒是东西挺多的，我们直接去看这边的东西。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.18.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+很简单可以看出是weblogic的一个框架(其实7001端口可以看出来，这里是多看了一步再下判断)
+可以看到有版本，我们直接用工具看有没有漏洞可以直接利用。
+工具链接：https://github.com/KimJun1010/WeblogicTool
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.19.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;这个检查一个漏洞，有了就直接停了，但是问题不大，反正可以用就行。然后这里可以选择shell上次或者内存马注入，shell上传的话，需要一个jsp木马，我们来试试内存马注入能不能用。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.20.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+可以访问看下有没有注入进去，可以访问我们就可以直接进行连接。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.21.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+成功连上哥斯拉，拿到内存马。&lt;/p&gt;
+&lt;h1 id=&#34;内网攻击&#34;&gt;内网攻击
+&lt;/h1&gt;&lt;p&gt;OK，拿到服务器的权限之后我们就要往内网打了。&lt;/p&gt;
+&lt;h2 id=&#34;cs上线&#34;&gt;CS上线
+&lt;/h2&gt;&lt;p&gt;拿到内存马之后我们就可以准备上线CS了。因为我们这里权限够，可以直接去关闭防火墙，方便后面上线。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;netsh advfirewall show all state  		  //查看防火墙状态
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;netsh firewall &lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt; opmode disable             &lt;span class=&#34;c1&#34;&gt;#winsows server 2003 之前&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;netsh advfirewall &lt;span class=&#34;nb&#34;&gt;set&lt;/span&gt; allprofiles state off   &lt;span class=&#34;c1&#34;&gt;#winsows server 2003 之后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;但是这里好像是已经关掉了，而且哥斯拉这里会乱码，因为回显是gbk编码，而哥斯拉默认UTF-8编码接收，所以直接乱码了，我们去虚拟机里面执行看看。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.22.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;OK啊，全开的，我们弄一个镜像留着，到时候回来试试，开着防火墙可不可以上CS。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.23.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+OK，防火墙关掉了，我们上线CS。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.24.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;简单上线CS。&lt;/p&gt;
+&lt;h2 id=&#34;权限维持&#34;&gt;权限维持
+&lt;/h2&gt;&lt;p&gt;依旧权限维持，简单选择一下。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.25.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+选一个顺眼的。这里还是选了&lt;code&gt;2564  2024  explorer.exe  x64   1   DE1AY\de1ay&lt;/code&gt;这个，直接inject就行。
+注入了一下，结果发现权限不够，难绷。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.26.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;OK，我们再注入一下。(难绷，这里注入进来之后权限掉了，刚刚没注意看，这个是普通用户，重新来了一遍，这里最好用spawn x64，要用inject也要去用高权限的cmd文件)
+更新图片：
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.28.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+原图片：
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.27.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;简单处理一下后续。(这里kill错值了，应该kill 1780的，问题不大，后面还是kill了)&lt;/p&gt;
+&lt;h2 id=&#34;内网信息收集&#34;&gt;内网信息收集
+&lt;/h2&gt;&lt;p&gt;OK，我们现在来进行一下内网的信息收集，步骤省略，直接给出结果。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;权限：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;04/13 22:25:57&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; beacon&amp;gt; getuid
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;04/13 22:25:57&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;*&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; Tasked beacon to get userid
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;04/13 22:25:58&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;+&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; host called home, sent: &lt;span class=&#34;m&#34;&gt;8&lt;/span&gt; bytes
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;04/13 22:25:58&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;*&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; You are NT AUTHORITY&lt;span class=&#34;se&#34;&gt;\S&lt;/span&gt;YSTEM &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;admin&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;域：
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   DNS 后缀搜索列表  . . . . . . . . : de1ay.com
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   IPv4 地址 . . . . . . . . . . . . : 10.10.10.80&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;首选&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   DNS 服务器  . . . . . . . . . . . : 10.10.10.10
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;   没有域权限，用户什么的基本查不了。直接扫描
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.29.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;扫一会吧，看看有啥东西。(这里查文章的时候还看到一个工具，感觉不错，有时间看看：AdFind是一款在 Windows &lt;strong&gt;Active Directory (AD)&lt;/strong&gt; 域环境中非常流行的免费&lt;strong&gt;命令行查询工具&lt;/strong&gt;，主要用于高效地检索和管理域内的各类信息)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.30.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;还是扫出来了内网的主机，分别是&lt;code&gt;10.10.10.10&lt;/code&gt;，和&lt;code&gt;10.10.10.201&lt;/code&gt;，这个201应该是我们之前看到的另一个主机，那么大概率，这个10是域控了。&lt;/p&gt;
+&lt;h2 id=&#34;横向攻击&#34;&gt;横向攻击
+&lt;/h2&gt;&lt;p&gt;前面收集的时候也可以看到啊，是有445端口开放的，大概率有smb，我们来抓一下密码。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.31.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;可以看到全拿到了啊，我们直接横向。(这里拿到的密码比较多，因为还有mysql服务和远程控制的密码也都抓到了，进行横向的时候注意辨别哪个是密码)
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.32.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+大概就是这样的，然后直接连接。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.33.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;成功拿下整个域环境。&lt;/p&gt;
+&lt;h2 id=&#34;黄金票据&#34;&gt;黄金票据
+&lt;/h2&gt;&lt;p&gt;还是老规矩，确认用户名，域名，sid，即可生成黄金票据。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.34.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;build出来，然后测试一下。(这里run klist查不出来了，不知道为什么，用了另外一个命令)
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.35.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;&lt;/p&gt;
+&lt;p&gt;这里好像生成的有点问题，重新手打才生成出来。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.36.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;
+有点奇怪，再看看。(到这里环境有点乱了，思路也乱了，重新开了一遍靶场，重打了一遍)&lt;/p&gt;
+&lt;h2 id=&#34;重打票据&#34;&gt;重打票据
+&lt;/h2&gt;&lt;p&gt;建议换命令打&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mimikatz lsadump::lsa /inject /name:krbtgt
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;然后就可以看到域SID了。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.37.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;OK，我们再去生成一下票据。
+&lt;img src=&#34;https://xxxxctfer.github.io/images/hongri/Attack2/%e9%9d%b6%e5%9c%ba2.38.png&#34;
+	
+	
+	
+	loading=&#34;lazy&#34;
+	
+		alt=&#34;示例&#34;
+	
+	
+&gt;OK，生成成功了，然后我们直接把他下载下来就行。感觉很怪啊，但是这里确实又是域控。很奇怪，但是问题不大，不管了。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>nacos历史漏洞复现</title>
         <link>https://xxxxctfer.github.io/p/nacos%E5%8E%86%E5%8F%B2%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
         <pubDate>Thu, 09 Apr 2026 00:00:00 +0000</pubDate>
