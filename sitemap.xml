@@ -3,13 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://xxxxctfer.github.io/</loc>
-    <lastmod>2026-04-14T00:00:00+00:00</lastmod>
+    <lastmod>2026-04-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/categories/</loc>
-    <lastmod>2026-04-14T00:00:00+00:00</lastmod>
+    <lastmod>2026-04-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/categories/java%E5%AE%89%E5%85%A8/</loc>
+    <lastmod>2026-04-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/post/</loc>
-    <lastmod>2026-04-14T00:00:00+00:00</lastmod>
+    <lastmod>2026-04-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/p/ruoyi%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</loc>
+    <lastmod>2026-04-18T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://xxxxctfer.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</loc>
+    <lastmod>2026-04-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/categories/web%E4%BA%BA/</loc>
     <lastmod>2026-04-14T00:00:00+00:00</lastmod>
@@ -62,9 +71,6 @@
     <loc>https://xxxxctfer.github.io/p/xss%E6%95%B4%E7%90%86/</loc>
     <lastmod>2026-02-26T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://xxxxctfer.github.io/categories/java%E5%AE%89%E5%85%A8/</loc>
-    <lastmod>2026-02-13T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://xxxxctfer.github.io/p/%E5%86%85%E5%AD%98%E9%A9%AC%E7%9A%84%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%AD%A5%E8%BF%90%E7%94%A8/</loc>
     <lastmod>2026-02-13T00:00:00+00:00</lastmod>
   </url><url>
@@ -90,9 +96,6 @@
     <lastmod>2026-01-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/p/jeecgboot%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</loc>
-    <lastmod>2025-12-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://xxxxctfer.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</loc>
     <lastmod>2025-12-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://xxxxctfer.github.io/page/</loc>
