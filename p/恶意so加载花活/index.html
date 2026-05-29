@@ -486,40 +486,40 @@ sqlite3.extension_dir为空，那就说明我们无法用sqlite3类进行加载�
 </div>
 </div><p>知道这个之后我们就可以写C语言攻击链路了。还有一些特殊的规则这里就不多说了，攻击链路如下：</p>
 <div class="table-wrapper"><table>
-  <thead>
-      <tr>
-          <th>步骤</th>
-          <th>操作</th>
-          <th>说明</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>1</td>
-          <td>编写恶意 SQLite 扩展 .so</td>
-          <td>在扩展初始化时执行系统命令</td>
-      </tr>
-      <tr>
-          <td>2</td>
-          <td>将 <code>.so</code> 上传到可写路径</td>
-          <td>绕过 <code>extension_dir</code> 限制</td>
-      </tr>
-      <tr>
-          <td>3</td>
-          <td>使用 <code>PDO('sqlite::memory:')</code> 创建内存数据库</td>
-          <td>无需文件，避免权限问题</td>
-      </tr>
-      <tr>
-          <td>4</td>
-          <td>调用 <code>$pdo-&gt;sqliteCreateFunction()</code> 或直接 <code>loadExtension('绝对路径')</code></td>
-          <td>加载扩展</td>
-      </tr>
-      <tr>
-          <td>5</td>
-          <td>扩展自动执行 <code>sqlite3_extension_init()</code> 中的恶意代码</td>
-          <td>实现命令执行</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>步骤</th>
+					<th>操作</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>1</td>
+					<td>编写恶意 SQLite 扩展 .so</td>
+					<td>在扩展初始化时执行系统命令</td>
+			</tr>
+			<tr>
+					<td>2</td>
+					<td>将 <code>.so</code> 上传到可写路径</td>
+					<td>绕过 <code>extension_dir</code> 限制</td>
+			</tr>
+			<tr>
+					<td>3</td>
+					<td>使用 <code>PDO('sqlite::memory:')</code> 创建内存数据库</td>
+					<td>无需文件，避免权限问题</td>
+			</tr>
+			<tr>
+					<td>4</td>
+					<td>调用 <code>$pdo-&gt;sqliteCreateFunction()</code> 或直接 <code>loadExtension('绝对路径')</code></td>
+					<td>加载扩展</td>
+			</tr>
+			<tr>
+					<td>5</td>
+					<td>扩展自动执行 <code>sqlite3_extension_init()</code> 中的恶意代码</td>
+					<td>实现命令执行</td>
+			</tr>
+	</tbody>
 </table></div>
 <p>具体代码如下：</p>
 <div class="highlight"><div class="chroma">
@@ -849,6 +849,25 @@ sqlite3.extension_dir为空，那就说明我们无法用sqlite3类进行加载�
             
                 
 <article class="has-image">
+    <a href="/p/hxctf%E5%87%BA%E9%A2%98%E8%AE%B0%E5%BD%95/">
+        
+        
+            <div class="article-image">
+                
+                    <img src="/images/CTF/HXCTF/web1.png" loading="lazy" data-key="" data-hash="/images/CTF/HXCTF/web1.png"/>
+                
+            </div>
+        
+
+        <div class="article-details">
+            <h2 class="article-title">HXCTF——出题记录</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="has-image">
     <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%89%E7%AB%A0/">
         
         
@@ -918,25 +937,6 @@ sqlite3.extension_dir为空，那就说明我们无法用sqlite3类进行加载�
 
         <div class="article-details">
             <h2 class="article-title">内网通信隧道学习</h2>
-        </div>
-    </a>
-</article>
-
-            
-                
-<article class="has-image">
-    <a href="/p/%E7%BA%A2%E6%97%A5%E9%9D%B6%E6%9C%BA%E7%BB%83%E4%B9%A0%E7%AC%AC%E4%B8%80%E7%AB%A0/">
-        
-        
-            <div class="article-image">
-                
-                    <img src="/images/hongri/Attack1/%e9%9d%b6%e5%9c%ba1.3.png" loading="lazy" data-key="" data-hash="/images/hongri/Attack1/靶场1.3.png"/>
-                
-            </div>
-        
-
-        <div class="article-details">
-            <h2 class="article-title">红日靶机练习(第一章)</h2>
         </div>
     </a>
 </article>

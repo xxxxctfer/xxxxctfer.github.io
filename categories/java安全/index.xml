@@ -2611,22 +2611,22 @@ OK，大概就是这些了，如果代码审计的话，人工就是审这些东
 影响版本：
 RuoYi&amp;lt;V-4.6.2&lt;/p&gt;
 &lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;RuoYi 版本号&lt;/th&gt;
-          &lt;th&gt;对象版本的默认AES密钥&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;4.6.1-4.3.1&lt;/td&gt;
-          &lt;td&gt;zSyK5Kp6PZAAjlT+eeNMlg==&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;3.4-及以下&lt;/td&gt;
-          &lt;td&gt;fCq+/xW488hMTCD+cmJ3aQ==&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;RuoYi 版本号&lt;/th&gt;
+					&lt;th&gt;对象版本的默认AES密钥&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;4.6.1-4.3.1&lt;/td&gt;
+					&lt;td&gt;zSyK5Kp6PZAAjlT+eeNMlg==&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;3.4-及以下&lt;/td&gt;
+					&lt;td&gt;fCq+/xW488hMTCD+cmJ3aQ==&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h2 id=&#34;0x03-sql注入&#34;&gt;0x03 SQL注入
 &lt;/h2&gt;&lt;p&gt;这个我们前面也已经搞过了，SQL注入的利用，我们记录一下利用版本和其他的注入点。
